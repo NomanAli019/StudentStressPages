@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTB HSSC Mathematics - Sentellect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== Base Styles & Variables ===== */
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e3a8a;
+            --secondary: #f59e0b;
+            --accent: #7fffd4;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --gray: #e2e8f0;
+            --success: #10b981;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== Navigation Bar ===== */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-circle {
+            background: #4db8ff;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            transition: 0.3s;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00bfff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #00bfff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .login-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            border: 1px solid #ccc;
+            color: #333;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .login-btn:hover {
+            border-color: #00bfff;
+            color: #00bfff;
+        }
+
+        .signup-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            background: #00bfff;
+            color: white;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .signup-btn:hover {
+            background: #0099cc;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            background: linear-gradient(135deg, #1da1f2, #004e92);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== Main Content Layout ===== */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 20px 0 60px;
+        }
+
+        /* ===== Curriculum Section ===== */
+        .curriculum-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .curriculum-section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section-header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .curriculum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gray);
+        }
+
+        .curriculum-header h2 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 50px;
+            padding: 8px 15px;
+            width: 250px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            padding: 5px 10px;
+            width: 100%;
+            outline: none;
+            color: var(--text);
+        }
+
+        .search-box i {
+            color: var(--text-light);
+        }
+
+        .chapter-list {
+            list-style: none;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .chapter-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chapter-list::-webkit-scrollbar-track {
+            background: var(--bg);
+            border-radius: 10px;
+        }
+
+        .chapter-list::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+
+        .chapter-item {
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: var(--bg);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chapter-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            cursor: pointer;
+            background: linear-gradient(to right, var(--primary-light), var(--primary));
+            color: white;
+        }
+
+        .chapter-title h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .topic-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .topic-list {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .chapter-item.active .topic-list {
+            max-height: 500px;
+        }
+
+        .topic-item {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .topic-duration {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .progress-ring {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ===== Info Section ===== */
+        .info-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .info-section h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-section p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            padding: 20px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--bg), var(--white));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-content h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .feature-content p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-about {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .footer-about p {
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .footer-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #3b82f6;
+        }
+
+        .footer-bottom p {
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+
+        .footer-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .footer-tags span {
+            background-color: #3b82f6;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        /* ===== Animations ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .animate {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        /* ===== Responsive Styles ===== */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .curriculum-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chapter-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .feature-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .feature-content p {
+                text-align: center;
+            }
+            
+            .footer-tags {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <div class="logo-circle">S</div>
+                <span class="logo-text">Sentellect</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#" class="active">Chapters</a></li>
+                <li><a href="#">Demo</a></li>
+                <li><a href="#">Progress</a></li>
+                <li><a href="#">Resources</a></li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="#" class="login-btn">Login</a>
+                <a href="#" class="signup-btn">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content animate">
+                <h1>PTB HSSC Mathematics</h1>
+                <p>Interactive curriculum browser aligned with Punjab Textbook Board</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Curriculum Section -->
+            <div class="curriculum-section animate">
+                <div class="curriculum-header">
+                    <h2>Curriculum Structure</h2>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search topics...">
+                    </div>
+                </div>
+                
+                <ul class="chapter-list">
+                    <!-- Chapter 1 -->
+                    <li class="chapter-item delay-1">
+                        <div class="chapter-title">
+                            <h3>Chapter 1: Functions and Limits</h3>
+                            <span class="topic-count">3 topics</span>
+                        </div>
+                        <ul class="topic-list">
+                            <li class="topic-item">
+                                <span>Introduction to Functions</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 45 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Limits and Continuity</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 60 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Types of Functions</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 75 min</span>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Chapter 2 -->
+                    <li class="chapter-item delay-1">
+                        <div class="chapter-title">
+                            <h3>Chapter 2: Differentiation</h3>
+                            <span class="topic-count">4 topics</span>
+                        </div>
+                        <ul class="topic-list">
+                            <li class="topic-item">
+                                <span>Derivatives Introduction</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 50 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Rules of Differentiation</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 65 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Applications of Derivatives</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 70 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Higher Order Derivatives</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 55 min</span>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Chapter 3 -->
+                    <li class="chapter-item delay-2">
+                        <div class="chapter-title">
+                            <h3>Chapter 3: Integration</h3>
+                            <span class="topic-count">3 topics</span>
+                        </div>
+                        <ul class="topic-list">
+                            <li class="topic-item">
+                                <span>Antiderivatives</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 60 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Definite Integrals</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 75 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Applications of Integration</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 80 min</span>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Chapter 4 -->
+                    <li class="chapter-item delay-2">
+                        <div class="chapter-title">
+                            <h3>Chapter 4: Introduction to Analytic Geometry</h3>
+                            <span class="topic-count">3 topics</span>
+                        </div>
+                        <ul class="topic-list">
+                            <li class="topic-item">
+                                <span>Coordinate System</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 45 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Distance Formula</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 50 min</span>
+                            </li>
+                            <li class="topic-item">
+                                <span>Line Equations</span>
+                                <span class="topic-duration"><i class="far fa-clock"></i> 65 min</span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section animate">
+                <h2>Select a Topic to Get Started</h2>
+                <p>Choose any topic from the curriculum structure on the left to view detailed content, examples, and interactive learning options.</p>
+                
+                <ul class="feature-list">
+                    <li class="feature-item delay-1">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Progress Tracking</h4>
+                            <p>Monitor your learning progress with detailed analytics and visual indicators</p>
+                        </div>
+                    </li>
+                    
+                    <li class="feature-item delay-2">
+                        <div class="feature-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Adaptive Difficulty</h4>
+                            <p>Content automatically adjusts to your skill level and learning pace</p>
+                        </div>
+                    </li>
+                    
+                    <li class="feature-item delay-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Emotional Support</h4>
+                            <p>AI understands your needs and provides encouragement when you need it most</p>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="footer-about">
+                    <div class="footer-logo">Sentellect</div>
+                    <p>Personalizing learning through emotions to improve educational experience for HSSC Mathematics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">Sentellect</div>
+                    <p>Personalizing learning through emotions to improve educational experience for HSSC Mathematics.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Platform</h3>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Chapters</a></li>
+                        <li><a href="#">Demo</a></li>
+                        <li><a href="#">Progress</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Study Materials</a></li>
+                        <li><a href="#">About Project</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Student Login</a></li>
+                        <li><a href="#">Create Account</a></li>
+                        <li><a href="#">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 Sentellect. Final Year Project - Educational Technology.</p>
+                <div class="footer-tags">
+                    <span>PTB HSSC Mathematics</span>
+                    <span>Emotion-Aware Learning</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation trigger on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.animate');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animateElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
+
+            // Chapter expand/collapse functionality
+            const chapterTitles = document.querySelectorAll('.chapter-title');
+            chapterTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const chapterItem = this.parentElement;
+                    chapterItem.classList.toggle('active');
+                });
+            });
+
+            // Topic selection functionality
+            const topicItems = document.querySelectorAll('.topic-item');
+            topicItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all topics
+                    topicItems.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked topic
+                    this.classList.add('active');
+                    
+                    // You can add additional functionality here, like loading topic content
+                    console.log('Selected topic:', this.querySelector('span').textContent);
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const chapterItems = document.querySelectorAll('.chapter-item');
+                
+                chapterItems.forEach(chapter => {
+                    const chapterTitle = chapter.querySelector('.chapter-title h3').textContent.toLowerCase();
+                    const topicItems = chapter.querySelectorAll('.topic-item');
+                    let hasMatch = chapterTitle.includes(searchTerm);
+                    
+                    topicItems.forEach(topic => {
+                        const topicText = topic.querySelector('span').textContent.toLowerCase();
+                        if (topicText.includes(searchTerm)) {
+                            hasMatch = true;
+                            topic.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                        } else {
+                            topic.style.backgroundColor = '';
+                        }
+                    });
+                    
+                    if (hasMatch) {
+                        chapter.style.display = 'block';
+                        chapter.classList.add('active'); // Expand if there's a match
+                    } else {
+                        chapter.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

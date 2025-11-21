@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentellect - Emotion-Aware Learning Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ====== Theme variables (kept same) ====== */
+    :root{
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e3a8a;
+      --secondary: #f59e0b;
+      --accent: #ec4899;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --gray: #e2e8f0;
+      --success: #10b981;
+      --card-shadow: 0 15px 35px rgba(30,64,175,0.15);
+    }
+
+    /* ====== Reset ====== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color:var(--text);
+      background: linear-gradient( -45deg, #f8fafc, #eef2ff, #f1f5f9, #f8fafc );
+      background-size: 400% 400%;
+      animation: bgShift 18s ease infinite;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+
+    @keyframes bgShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    a{text-decoration:none;color:inherit}
+    h1,h2,h3,h4{font-weight:700;line-height:1.2}
+
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* ====== Header (KEEP EXACT STRUCTURE/STYLE) ====== */
+    header{
+      position:fixed;top:0;left:0;width:100%;z-index:1000;
+      background-color:var(--white);
+      box-shadow:0 2px 15px rgba(0,0,0,0.1);
+      transition:all 0.3s ease;
+    }
+    header.scrolled{padding:10px 0;box-shadow:0 5px 20px rgba(0,0,0,0.15)}
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:var(--white);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 4px 8px rgba(30,64,175,0.2)}
+    .logo-text{font-size:1.5rem;font-weight:700;color:var(--primary)}
+    .nav-links{display:flex;list-style:none;gap:30px}
+    .nav-links a{font-weight:500;position:relative;padding:5px 0}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:linear-gradient(to right,var(--primary),var(--secondary));transition:width 0.3s;border-radius:2px}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-links a.active{color:var(--primary);font-weight:600}
+    .auth-buttons{display:flex;gap:15px}
+    .mobile-menu-btn{display:none;background:none;border:none;font-size:1.5rem;color:var(--primary);cursor:pointer}
+
+    /* ====== Login section ====== */
+    .login-section{
+      padding:140px 0 80px;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* background canvas sits below content */
+    #bgCanvas{
+      position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+    }
+
+    /* subtle decorative SVG wave (kept) */
+    .bg-wave{
+      position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;opacity:0.06;pointer-events:none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%233b82f6' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+      background-size:cover;
+    }
+
+    /* floating shapes (kept names to avoid structural changes) */
+    .floating-shapes{position:absolute;width:100%;height:100%;top:0;left:0;overflow:hidden;z-index:0;pointer-events:none}
+    .shape{position:absolute;border-radius:50%;opacity:0.12;transform-origin:center}
+    .shape-1{width:120px;height:120px;background:var(--primary);top:8%;left:8%;animation: float1 8s ease-in-out infinite}
+    .shape-2{width:70px;height:70px;background:var(--secondary);top:72%;left:6%;animation: float2 10s ease-in-out infinite}
+    .shape-3{width:90px;height:90px;background:var(--primary-light);top:28%;right:6%;animation: float3 12s ease-in-out infinite}
+    .shape-4{width:60px;height:60px;background:var(--secondary);bottom:10%;right:16%;animation: float4 9s ease-in-out infinite}
+
+    @keyframes float1{0%{transform:translateY(0)}50%{transform:translateY(-18px) rotate(6deg)}100%{transform:translateY(0)}}
+    @keyframes float2{0%{transform:translateY(0)}50%{transform:translateY(-12px) rotate(-6deg)}100%{transform:translateY(0)}}
+    @keyframes float3{0%{transform:translateY(0)}50%{transform:translateY(-22px) rotate(10deg)}100%{transform:translateY(0)}}
+    @keyframes float4{0%{transform:translateY(0)}50%{transform:translateY(-10px) rotate(-8deg)}100%{transform:translateY(0)}}
+
+    /* ====== Login card (glass + 3D tilt + entrance) ====== */
+    .login-container{
+      position:relative;
+      z-index:2;
+      width:420px;
+      max-width:92%;
+      background:linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.85));
+      border-radius:18px;
+      padding:36px 28px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transform-style:preserve-3d;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      will-change:transform;
+      overflow:hidden;
+      border:1px solid rgba(30,64,175,0.06);
+      animation: cardIn 700ms cubic-bezier(.2,.9,.3,1);
+    }
+
+    @keyframes cardIn{
+      from{opacity:0;transform:translateY(14px) scale(.995)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    .login-header{text-align:center;margin-bottom:22px;pointer-events:auto}
+    .login-icon{
+      width:84px;height:84px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--primary-light),var(--primary));color:#fff;font-size:2rem;box-shadow:0 8px 30px rgba(59,130,246,0.22);
+      animation: iconPulse 2500ms ease-in-out infinite;
+    }
+    @keyframes iconPulse{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.06)}
+    }
+    .login-header h2{font-size:1.9rem;color:var(--primary);margin-bottom:6px}
+    .login-header p{color:var(--text-light);font-size:0.98rem}
+
+    /* ====== Form groups (animated labels & icons) ====== */
+    .form-group{position:relative;margin-bottom:20px}
+    .form-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--text);transition:all .22s ease;display:flex;align-items:center;gap:10px}
+    .form-group label i{color:var(--primary);opacity:0.95}
+    .form-group input{
+      width:100%;
+      padding:14px 45px 14px 48px;
+      border-radius:12px;border:2px solid var(--gray);
+      font-size:1rem;transition:all .22s ease;background:linear-gradient(#fff,#fbfdff);
+      outline:none;
+    }
+    .form-group input::placeholder{color:var(--text-light)}
+    .input-icon{position:absolute;left:14px;top:42px;color:var(--text-light);transition:all .2s ease}
+    .form-group.focused .input-icon{color:var(--primary);transform:scale(1.12)}
+    .form-group.focused label{color:var(--primary)}
+    .form-group input:focus{border-color:var(--primary);box-shadow:0 0 0 6px rgba(59,130,246,0.08)}
+
+    /* password toggle button */
+    .password-toggle{
+      position:absolute;right:14px;top:42px;background:none;border:none;padding:6px;border-radius:8px;cursor:pointer;color:var(--text-light);
+      display:flex;align-items:center;justify-content:center;transition:all .18s ease;font-size:0.98rem;
+    }
+    .password-toggle:hover{color:var(--primary);transform:translateY(-2px)}
+
+    /* ====== Login button: ripple + loading + success ====== */
+    .btn-login{
+      width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(to right,var(--primary),var(--primary-dark));
+      color:#fff;font-weight:700;font-size:1.05rem;cursor:pointer;position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;
+      transition:transform .18s ease,box-shadow .18s ease;
+      box-shadow:0 8px 20px rgba(30,64,175,0.18);
+    }
+    .btn-login:active{transform:translateY(1px)}
+    /* ripple span created dynamically */
+    .ripple{
+      position:absolute;border-radius:50%;transform:scale(0);animation:rippleAnim .6s linear;
+      background:rgba(255,255,255,0.35);pointer-events:none;
+    }
+    @keyframes rippleAnim{to{transform:scale(3);opacity:0}}
+
+    /* loading bar inside button */
+    .btn-login.loading{pointer-events:none}
+    .btn-login.loading::after{
+      content:'';position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,#fff5,#fff);
+      width:0;animation:btnLoad 1.6s linear forwards;
+    }
+    @keyframes btnLoad{0%{width:0}80%{width:100%}100%{width:100%}}
+
+    .btn-login.success{background:linear-gradient(90deg,var(--success),#059669);box-shadow:0 10px 25px rgba(5,150,105,0.18)}
+    .btn-login .btn-text{display:inline-block;transition:opacity .2s}
+    .btn-login .btn-icon{display:none;margin-right:8px}
+    .btn-login.success .btn-text{opacity:0}
+    .btn-login.success .btn-icon{display:inline-block;color:#fff;font-size:1.05rem}
+
+    /* ====== Extra links ====== */
+    .extra-links{margin-top:18px;text-align:center;padding-top:16px;border-top:1px solid var(--gray);font-size:0.95rem}
+    .extra-links a{color:var(--primary);font-weight:600}
+
+    /* ====== Footer (KEEP EXACT STRUCTURE/CONTENT) ====== */
+    .footer{
+      background:linear-gradient(to bottom,var(--primary-dark),#0f172a);
+      color:var(--white);
+      padding:80px 0 30px;
+      position:relative;margin-top:40px;z-index:1;
+    }
+    .footer::before{content:'';position:absolute;top:0;left:0;width:100%;height:10px;background:linear-gradient(90deg,var(--secondary),var(--primary))}
+    .footer-content{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:60px}
+    .footer-about{grid-column:span 2}
+    .footer-logo{font-size:1.8rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .footer-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--white),var(--gray));color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;box-shadow:0 4px 8px rgba(0,0,0,0.1)}
+    .footer-about p{opacity:0.8;margin-bottom:25px;line-height:1.7}
+    .social-links{display:flex;gap:15px}
+    .social-link{width:40px;height:40px;border-radius:50%;background-color:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all .3s}
+    .social-link:hover{background:linear-gradient(135deg,var(--secondary),var(--accent));transform:translateY(-3px)}
+    .footer-links h3{font-size:1.2rem;margin-bottom:25px;position:relative;padding-bottom:10px;color:var(--white)}
+    .footer-links h3::after{content:'';position:absolute;bottom:0;left:0;width:40px;height:3px;background:linear-gradient(to right,var(--secondary),var(--accent))}
+    .footer-links ul{list-style:none}
+    .footer-links li{margin-bottom:12px}
+    .footer-links a{opacity:0.8;transition:all .3s;position:relative;padding-left:15px}
+    .footer-links a::before{content:'→';position:absolute;left:0;opacity:0;transition:all .3s}
+    .footer-links a:hover{opacity:1;padding-left:20px}
+    .footer-links a:hover::before{opacity:1;left:-5px}
+    .footer-bottom{text-align:center;padding-top:30px;border-top:1px solid rgba(255,255,255,0.1)}
+    .footer-bottom p{opacity:0.7;margin-bottom:20px}
+    .footer-tags{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
+    .tag{background-color:rgba(255,255,255,0.08);padding:6px 14px;border-radius:50px;font-size:0.9rem;transition:all .3s}
+    .tag:hover{background:linear-gradient(to right,var(--secondary),var(--accent));color:var(--text);transform:translateY(-3px)}
+
+    /* ====== FAB (kept) ====== */
+    .fab{
+      position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:var(--white);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 6px 15px rgba(30,64,175,0.3);cursor:pointer;z-index:999;transition:transform .18s;
+      animation:fabPulse 2s infinite ease-in-out;
+    }
+    .fab:hover{transform:scale(1.06) rotate(12deg)}
+    @keyframes fabPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+    /* ====== Responsive ====== */
+    @media (max-width:992px){
+      .footer-content{grid-template-columns:repeat(2,1fr)}
+      .footer-about{grid-column:span 2}
+    }
+    @media (max-width:768px){
+      .navbar{padding:15px 0}
+      .nav-links{display:none}
+      .mobile-menu-btn{display:block}
+      .login-section{padding:110px 0 60px}
+      .login-container{padding:28px 20px;width:92%}
+      .shape{display:none}
+      .footer-content{grid-template-columns:1fr}
+      .footer-about{grid-column:span 1}
+    }
+    @media (max-width:576px){
+      .login-header h2{font-size:1.6rem}
+      .login-icon{width:68px;height:68px;font-size:1.6rem}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Navbar (unchanged structure/content) -->
+  <header id="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo">
+          <div class="logo-icon">S</div>
+          <span class="logo-text">Sentellect</span>
+        </a>
+        
+        <ul class="nav-links">
+          <li><a href="sent.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="Sentellect Platform Features.html">Features</a></li>
+          <li><a href="#">Chapters</a></li>
+          <li><a href="#">Demo</a></li>
+          <li><a href="#">Progress</a></li>
+          <li><a href="#">Resources</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <button class="mobile-menu-btn" aria-label="Open menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Login Section -->
+  <section class="login-section" aria-labelledby="loginTitle">
+    <!-- animated canvas background -->
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+    <!-- subtle wave SVG overlay -->
+    <div class="bg-wave" aria-hidden="true"></div>
+
+    <!-- floating shapes -->
+    <div class="floating-shapes" aria-hidden="true">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+    </div>
+
+    <!-- Login card -->
+    <div class="login-container" id="loginCard" role="region" aria-label="Login form">
+      <div class="login-header">
+        <div class="login-icon" aria-hidden="true"><i class="fas fa-lock"></i></div>
+        <h2 id="loginTitle">Welcome Back</h2>
+        <p>Sign in to continue your learning journey</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group" id="fg-user">
+          <label for="username"><i class="fas fa-user"></i> Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username" />
+          <i class="fas fa-user input-icon" aria-hidden="true"></i>
+        </div>
+
+        <div class="form-group" id="fg-pass">
+          <label for="password"><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+          <i class="fas fa-lock input-icon" aria-hidden="true"></i>
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility" title="Show / hide password"><i class="fas fa-eye"></i></button>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn" aria-live="polite">
+          <span class="btn-icon"><i class="fas fa-check"></i></span>
+          <span class="btn-text">Login to Your Account</span>
+        </button>
+      </form>
+
+      <div class="extra-links">
+        <p><a href="#">Forgot Password?</a> | <a href="signup.html">Create Account</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (unchanged content/structure) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">S</div>
+            SenteIlect
+          </div>
+          <p>Personalizing learning through emotions to improve educational experience for HSSC Mathematics.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Platform</h3>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Chapters</a></li>
+            <li><a href="#">Demo</a></li>
+            <li><a href="#">Progress</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#">Study Materials</a></li>
+            <li><a href="#">About Project</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Account</h3>
+          <ul>
+            <li><a href="#">Student Login</a></li>
+            <li><a href="#">Create Account</a></li>
+            <li><a href="#">Help Center</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2024 SenteIlect. Final Year Project - Educational Technology.</p>
+        <div class="footer-tags">
+          <a href="#" class="tag">PTB HSSC Mathematics</a>
+          <a href="#" class="tag">Emotion-Aware Learning</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating action button (kept) -->
+  <button class="fab" aria-label="Help"><i class="fas fa-question"></i></button>
+
+  <script>
+    /* ===== Header scroll behaviour (kept) ===== */
+    (function(){
+      const header = document.getElementById('header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) header.classList.add('scrolled'); else header.classList.remove('scrolled');
+      });
+    })();
+
+    /* ===== 3D tilt effect for login card ===== */
+    (function(){
+      const card = document.getElementById('loginCard');
+      const constraint = 12; // tilt strength
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width/2;
+        const cy = rect.height/2;
+        const rx = ((y - cy) / cy) * constraint;
+        const ry = ((x - cx) / cx) * -constraint;
+        card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+        card.style.boxShadow = `0 24px 60px rgba(30,64,175,0.18)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+        card.style.boxShadow = '';
+      });
+      // subtle scale on touchstart (mobile)
+      card.addEventListener('touchstart', () => card.style.transform = 'translateY(-6px)');
+      card.addEventListener('touchend', () => card.style.transform = '');
+    })();
+
+    /* ===== Input focus handling & initial 'focused' if value present ===== */
+    (function(){
+      const groups = document.querySelectorAll('.form-group');
+      groups.forEach(g => {
+        const input = g.querySelector('input');
+        function update(){
+          if (document.activeElement === input || input.value.trim() !== '') g.classList.add('focused');
+          else g.classList.remove('focused');
+        }
+        input.addEventListener('focus', update);
+        input.addEventListener('blur', update);
+        input.addEventListener('input', update);
+        // initial
+        update();
+      });
+    })();
+
+    /* ===== Password toggle ===== */
+    (function(){
+      const pass = document.getElementById('password');
+      const toggle = document.querySelector('.password-toggle');
+      toggle.addEventListener('click', () => {
+        const icon = toggle.querySelector('i');
+        if (pass.type === 'password') { pass.type = 'text'; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
+        else { pass.type = 'password'; icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
+        pass.focus();
+      });
+    })();
+
+    /* ===== Button ripple + login simulation (loading -> success -> reset) ===== */
+    (function(){
+      const form = document.getElementById('loginForm');
+      const btn = document.getElementById('loginBtn');
+
+      // ripple on click
+      btn.addEventListener('pointerdown', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const r = document.createElement('span');
+        r.className = 'ripple';
+        const size = Math.max(rect.width, rect.height) * 0.8;
+        r.style.width = r.style.height = size + 'px';
+        r.style.left = (e.clientX - rect.left - size/2) + 'px';
+        r.style.top = (e.clientY - rect.top - size/2) + 'px';
+        btn.appendChild(r);
+        setTimeout(() => r.remove(), 650);
+      });
+
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        if (!form.checkValidity()) {
+          // let browser show validation
+          form.reportValidity();
+          return;
+        }
+
+        // start loading
+        btn.classList.add('loading');
+        // optionally disable inputs
+        Array.from(form.elements).forEach(el => el.disabled = true);
+
+        setTimeout(() => {
+          // show success
+          btn.classList.remove('loading');
+          btn.classList.add('success');
+          btn.setAttribute('aria-live', 'polite');
+          // swap inner content visually via classes
+          // after success show check and reset
+          setTimeout(() => {
+            // reset visuals & inputs
+            btn.classList.remove('success');
+            btn.setAttribute('aria-live', 'off');
+            Array.from(form.elements).forEach(el => el.disabled = false);
+            // keep username, clear password for security
+            document.getElementById('password').value = '';
+            // update focused state on password
+            document.getElementById('fg-pass').classList.remove('focused');
+          }, 1600);
+        }, 1400);
+      });
+    })();
+
+    /* ===== Canvas particle background (subtle moving orbs) ===== */
+    (function(){
+      const canvas = document.getElementById('bgCanvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = innerWidth;
+      let H = canvas.height = innerHeight;
+      const DPR = window.devicePixelRatio || 1;
+      canvas.width = W * DPR; canvas.height = H * DPR; canvas.style.width = W + 'px'; canvas.style.height = H + 'px'; ctx.scale(DPR, DPR);
+
+      const particles = [];
+      const count = Math.max(10, Math.floor((W*H)/120000)); // scale with area
+      for (let i=0;i<count;i++){
+        particles.push({
+          x: Math.random()*W,
+          y: Math.random()*H,
+          r: 4 + Math.random()*10,
+          vx: (Math.random()-0.5)*0.15,
+          vy: -0.2 - Math.random()*0.6,
+          alpha: 0.06 + Math.random()*0.12,
+          hueShift: Math.random()*30
+        });
+      }
+
+      function resize(){
+        W = canvas.width = innerWidth;
+        H = canvas.height = innerHeight;
+        canvas.width = W * DPR; canvas.height = H * DPR; canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      window.addEventListener('resize', resize);
+
+      function draw(){
+        ctx.clearRect(0,0,W,H);
+        for (let p of particles){
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.y + p.r < -20) { p.y = H + Math.random()*60; p.x = Math.random()*W; }
+          if (p.x - p.r > W+20) p.x = -20;
+          if (p.x + p.r < -20) p.x = W+20;
+
+          ctx.beginPath();
+          // gradient circle for soft glow
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*2.6);
+          g.addColorStop(0, `rgba(59,130,246,${p.alpha*1.0})`);
+          g.addColorStop(0.5, `rgba(59,130,246,${p.alpha*0.55})`);
+          g.addColorStop(1, `rgba(59,130,246,0)`);
+          ctx.fillStyle = g;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ===== Mobile menu button: open/close toggling (simple) ===== */
+    (function(){
+      const mBtn = document.querySelector('.mobile-menu-btn');
+      const nav = document.querySelector('.nav-links');
+      mBtn.addEventListener('click', ()=> {
+        if(nav.style.display === 'flex') nav.style.display = 'none';
+        else nav.style.display = 'flex';
+      });
+      // close nav on link click (mobile)
+      document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', ()=> {
+        if(window.innerWidth < 770) nav.style.display = 'none';
+      }));
+    })();
+
+    /* ===== Accessibility: enable pressing Enter on password toggle to work ===== */
+    (function(){
+      const toggle = document.querySelector('.password-toggle');
+      toggle.addEventListener('keydown', (e)=> {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+      });
+    })();
+  </script>
+</body>
+</html>

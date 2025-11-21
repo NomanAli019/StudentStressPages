@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentellect - Simplified Linear Inequalities</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ===== Base Styles ===== */
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e3a8a;
+      --secondary: #f59e0b;
+      --accent: #ec4899;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --text-lighter: #94a3b8;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --gray: #e2e8f0;
+      --gray-light: #f1f5f9;
+      --success: #10b981;
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+
+    .section-title p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+
+    .btn-secondary {
+      background-color: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .animate {
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+
+    /* ===== Header/Navbar ===== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: var(--white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      padding: 10px 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: var(--white);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      position: relative;
+      padding: 5px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .login-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+      color: var(--primary);
+    }
+
+    .signup-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: var(--white);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.25);
+    }
+
+    .signup-btn:hover {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(30, 64, 175, 0.35);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+    
+    /* ===== Hero Section ===== */
+    .hero {
+      position: relative;
+      padding: 160px 0 70px;
+      background: linear-gradient(135deg, var(--primary), #004e92);
+      color: var(--white);
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgZmlsbD0idXJsKCNwYXR0ZXJuKSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIvPjwvc3ZnPg==');
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero h1 span {
+      color: var(--secondary);
+      position: relative;
+    }
+
+    .hero h1 span::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.3);
+      z-index: -1;
+      border-radius: 4px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .hero .btn-secondary {
+      background-color: transparent;
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    .hero .btn-secondary:hover {
+      background-color: var(--white);
+      color: var(--primary);
+    }
+
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 0;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 100px;
+      height: 100px;
+      bottom: 15%;
+      right: 10%;
+      animation-delay: 0.5s;
+    }
+
+    .shape-3 {
+      width: 80px;
+      height: 80px;
+      top: 30%;
+      right: 20%;
+      animation-delay: 1s;
+    }
+    
+    /* ===== Card Styles ===== */
+    .card {
+      background-color: var(--white);
+      border-radius: 16px;
+      padding: 25px;
+      margin: 20px 0;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .card:hover::before {
+      width: 8px;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    h3 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin: 20px 0 15px;
+      font-weight: 600;
+      position: relative;
+      padding-left: 15px;
+    }
+    
+    h3::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 6px;
+      height: 6px;
+      background: var(--secondary);
+      border-radius: 50%;
+    }
+
+    p {
+      color: var(--text-light);
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+
+    /* ===== Game Link ===== */
+    .game-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: linear-gradient(to right, var(--success), #0da271);
+      color: var(--white);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .game-link:hover {
+      background: linear-gradient(to right, #0da271, var(--success));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    /* ===== Step Buttons ===== */
+    .step-buttons {
+      display: flex;
+      gap: 12px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .step-btn {
+      padding: 10px 16px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+    }
+
+    .step-btn:hover {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(30, 64, 175, 0.3);
+    }
+
+    /* ===== Solution Display ===== */
+    .solution {
+      background: var(--gray-light);
+      border-left: 4px solid var(--secondary);
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      transition: all 0.3s ease;
+    }
+
+    /* ===== Progress Bar ===== */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background-color: var(--gray);
+      border-radius: 4px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 4px;
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    /* ===== Graph Styles ===== */
+    .graph-container {
+      height: 300px;
+      margin: 15px 0;
+      background: var(--white);
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ===== Resources Section ===== */
+    .resources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .resource-card {
+      flex: 1;
+      min-width: 200px;
+      background: var(--white);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .resource-card a {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .resource-card a:hover {
+      background: var(--primary-dark);
+    }
+
+    /* ===== Self-Care Notes ===== */
+    .self-care {
+      background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      border-left: 5px solid var(--accent);
+      animation: pulse 3s infinite;
+    }
+
+    .self-care h4 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .self-care p {
+      color: var(--text);
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    /* ===== Game Area ===== */
+    .game-container {
+      background: #e6f2ff;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .game-area {
+      position: relative;
+      height: 250px;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(106, 17, 203, 0.7);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .bubble:hover {
+      transform: scale(1.1);
+    }
+
+    .game-score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+
+    /* ===== Completion Message ===== */
+    .completion {
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+      border-radius: 16px;
+      margin: 30px 0;
+      animation: fadeIn 1s ease;
+    }
+
+    .completion h3 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .completion p {
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background: linear-gradient(to bottom, var(--primary-dark), #0f172a);
+      color: var(--white);
+      padding: 60px 0 20px;
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .footer-about {
+      grid-column: span 2;
+    }
+
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--white), var(--gray));
+      color: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .footer-about p {
+      opacity: 0.8;
+      margin-bottom: 25px;
+      line-height: 1.7;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .footer-links h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+      color: var(--white);
+    }
+
+    .footer-links h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(to right, var(--secondary), var(--accent));
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      opacity: 0.8;
+      transition: all 0.3s ease;
+      position: relative;
+      padding-left: 15px;
+    }
+
+    .footer-links a::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      padding-left: 20px;
+    }
+
+    .footer-links a:hover::before {
+      opacity: 1;
+      left: -5px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-bottom p {
+      opacity: 0.7;
+      margin-bottom: 15px;
+    }
+
+    .footer-tags {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 5px 15px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .tag:hover {
+      background: linear-gradient(to right, var(--secondary), var(--accent));
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+    
+    /* ===== Floating Action Button ===== */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 6px 15px rgba(30, 64, 175, 0.3);
+      cursor: pointer;
+      z-index: 999;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.4);
+    }
+
+    /* ===== Visual Elements ===== */
+    .math-emoji {
+      font-size: 1.8rem;
+      margin: 0 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .visual-element {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .emoji-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    /* ===== Simplified Elements ===== */
+    .simple-step {
+      background: var(--gray-light);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .simple-step h4 {
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .quick-tip {
+      background: linear-gradient(135deg, #fef3c7, #fef7cd);
+      border-left: 4px solid var(--secondary);
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ===== Responsive Styles ===== */
+    @media (max-width: 992px) {
+      .nav-links {
+        gap: 20px;
+      }
+      
+      .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .footer-about {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 15px 0;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-about {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .section-title h2 {
+        font-size: 1.8rem;
+      }
+      
+      .hero {
+        padding: 140px 0 60px;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header id="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo">
+          <div class="logo-icon">S</div>
+          <span class="logo-text">Sentellect</span>
+        </a>
+        
+        <ul class="nav-links">
+          <li><a href="#" class="active">Home</a></li>
+          <li><a href="#basics">Basics</a></li>
+          <li><a href="#examples">Examples</a></li>
+          <li><a href="#practice">Practice</a></li>
+          <li><a href="#game">Game</a></li>
+          <li><a href="#resources">Resources</a></li>
+        </ul>
+        
+        <div class="auth-buttons">
+          <a href="#" class="login-btn">Login</a>
+          <a href="#" class="signup-btn">Sign Up</a>
+        </div>
+        
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="animate">Linear Inequalities - Simplified</h1>
+        <p class="animate delay-1">Learn the essentials of linear inequalities with a stress-free approach</p>
+        <div class="hero-buttons">
+          <a href="#basics" class="btn btn-primary animate delay-2">Start Learning</a>
+          <a href="#game" class="btn btn-secondary animate delay-3">Play Game</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Game Link -->
+    <div class="card animate">
+      <h2>🎮 Quick Practice Game</h2>
+      <p>Try this simple game to practice inequalities:</p>
+      <a href="https://www.begalileo.com/math-games/grade-8/write-and-graph-linear-inequalities" target="_blank" class="game-link">
+        <i class="fas fa-gamepad"></i> Play Inequality Game
+      </a>
+    </div>
+
+    <!-- Visual Element -->
+    <div class="visual-element animate delay-1">
+      <div class="emoji-row">
+        <span class="math-emoji">📈</span>
+        <span class="math-emoji">📉</span>
+        <span class="math-emoji">📊</span>
+      </div>
+    </div>
+
+    <!-- Basics Section -->
+    <section id="basics" class="section">
+      <div class="card animate delay-1">
+        <h2>Linear Inequalities Basics</h2>
+        <p>Linear inequalities show relationships where one side is greater or less than the other.</p>
+        
+        <div class="quick-tip">
+          <p><strong>💡 Quick Tip:</strong> Inequalities use &lt;, &gt;, ≤, or ≥ instead of =</p>
+        </div>
+        
+        <h3>Simple Steps to Graph Inequalities</h3>
+        
+        <div class="simple-step">
+          <h4>Step 1: Draw the Line</h4>
+          <p>Replace the inequality with = and draw that line</p>
+        </div>
+        
+        <div class="simple-step">
+          <h4>Step 2: Solid or Dashed?</h4>
+          <p>Use solid line for ≤ or ≥ (points on line are included)</p>
+          <p>Use dashed line for &lt; or &gt; (points on line are not included)</p>
+        </div>
+        
+        <div class="simple-step">
+          <h4>Step 3: Test a Point</h4>
+          <p>Pick a point not on the line (0,0 is easiest)</p>
+          <p>If it satisfies the inequality, shade that side</p>
+          <p>If not, shade the opposite side</p>
+        </div>
+        
+        <div class="controls">
+          <button class="step-btn" onclick="showInequality('2x + y ≤ 6')">Show Example 1</button>
+          <button class="step-btn" onclick="showInequality('3x + 7y ≥ 21')">Show Example 2</button>
+        </div>
+        
+        <div class="graph-container" id="basicsGraph">
+          <canvas id="inequalityGraph"></canvas>
+        </div>
+        
+        <div id="current-inequality" class="solution">
+          <p>Click a button above to see an example!</p>
+        </div>
+
+        <!-- Self-Care Note -->
+        <div class="self-care animate delay-2">
+          <h4>💖 You're Doing Great! 💖</h4>
+          <p>Remember: Learning at your own pace is perfectly okay. Every step forward counts! 🌟</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-Life Examples Section -->
+    <section id="examples" class="section">
+      <div class="card animate delay-2">
+        <h2>Real-Life Examples</h2>
+        
+        <div class="real-life-example">
+          <h3>Budget Example</h3>
+          <p>You have $100 for books ($10 each) and notebooks ($5 each):</p>
+          <p><strong>10x + 5y ≤ 100</strong></p>
+          <p>This shows all combinations you can buy within budget.</p>
+          <div class="graph-container">
+            <canvas id="budgetGraph"></canvas>
+          </div>
+        </div>
+        
+        <div class="real-life-example">
+          <h3>Time Management</h3>
+          <p>You have 8 hours for math (x) and English (y) study:</p>
+          <p><strong>x + y ≤ 8</strong> and <strong>x ≥ 2y</strong></p>
+          <p>This shows possible time allocations.</p>
+          <div class="graph-container">
+            <canvas id="timeGraph"></canvas>
+          </div>
+        </div>
+
+        <!-- Self-Care Note -->
+        <div class="self-care animate delay-3">
+          <h4>🌈 Math in Real Life 🌈</h4>
+          <p>See how math applies to everyday situations? You're building practical skills! 🧠✨</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Practice Questions Section -->
+    <section id="practice" class="section">
+      <div class="card animate delay-3">
+        <h2>Practice Questions</h2>
+        
+        <div class="question">
+          <h3>Question 1: Simple Inequality</h3>
+          <p>Solve: 5x - 3 &lt; 2x + 9</p>
+          <div class="progress-container">
+            <div class="progress-bar" id="progress1"></div>
+          </div>
+          <div class="step-buttons">
+            <button class="step-btn" onclick="showSolution('sol1', 1)">Step 1</button>
+            <button class="step-btn" onclick="showSolution('sol1', 2)">Step 2</button>
+            <button class="step-btn" onclick="showSolution('sol1', 3)">Answer</button>
+          </div>
+          <div id="sol1" class="solution">👉 Click the steps above to see the solution</div>
+        </div>
+
+        <div class="question">
+          <h3>Question 2: Graphing</h3>
+          <p>Graph: y ≥ x - 2</p>
+          <div class="progress-container">
+            <div class="progress-bar" id="progress2"></div>
+          </div>
+          <div class="step-buttons">
+            <button class="step-btn" onclick="showSolution('sol2', 1)">Step 1</button>
+            <button class="step-btn" onclick="showSolution('sol2', 2)">Step 2</button>
+            <button class="step-btn" onclick="showSolution('sol2', 3)">Graph</button>
+          </div>
+          <div id="sol2" class="solution">👉 Click the steps above to see the solution</div>
+          <div class="graph-container">
+            <canvas id="question2Graph"></canvas>
+          </div>
+        </div>
+
+        <!-- Self-Care Note -->
+        <div class="self-care animate">
+          <h4>🌟 Practice Makes Progress! 🌟</h4>
+          <p>Each problem you try makes you better. Don't worry about perfection - focus on progress! 🧩💪</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stress Relief Game Section -->
+    <section id="game" class="section">
+      <div class="card animate">
+        <h2>🎮 Relaxing Inequality Game 🎮</h2>
+        <p>Take a break with this simple inequality game!</p>
+        
+        <div class="game-container">
+          <div class="game-score">
+            Time: <span id="game-time">30</span>s | Score: <span id="bubble-score">0</span>
+          </div>
+          <button class="step-btn" onclick="startBubbleGame()">Start Game</button>
+          <div class="game-area" id="game-area">
+            <p>Click Start Game to begin!</p>
+          </div>
+          <div class="game-instructions">
+            <p>💡 <strong>How to play:</strong> Click on bubbles with correct inequalities</p>
+          </div>
+        </div>
+        
+        <div class="self-care">
+          <h4>😌 Fun Learning Zone 😌</h4>
+          <p>Games make learning enjoyable! No pressure, just practice in a fun way. 🎯🎉</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="section">
+      <div class="card animate delay-1">
+        <h2>Helpful Resources</h2>
+        
+        <div class="visual-element">
+          <div class="emoji-row">
+            <span class="math-emoji">📚</span>
+            <span class="math-emoji">🎥</span>
+            <span class="math-emoji">💡</span>
+          </div>
+        </div>
+        
+        <div class="resources">
+          <div class="resource-card">
+            <h3>Video Help</h3>
+            <p>Short videos to help you understand:</p>
+            <a href="https://www.youtube.com/watch?v=YBYl7ry5sUQ" target="_blank">📹 Graphing Inequalities</a>
+            <a href="https://www.youtube.com/watch?v=P_qc_gzq1y8" target="_blank">🎬 Basic Inequalities</a>
+          </div>
+          
+          <div class="resource-card">
+            <h3>Practice Games</h3>
+            <p>Fun ways to practice:</p>
+            <a href="https://www.mathgames.com/skill/7.95-graph-inequalities" target="_blank">🎮 Graph Practice</a>
+            <a href="https://www.ixl.com/math/algebra-1/graph-linear-inequalities" target="_blank">🕹️ Inequality Games</a>
+          </div>
+          
+          <div class="resource-card">
+            <h3>Study Tips</h3>
+            <p>Simple ways to learn better:</p>
+            <ul style="text-align:left; margin-left:20px;">
+              <li>Take short breaks</li>
+              <li>Practice a little daily</li>
+              <li>Ask for help when needed</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Self-Care Note -->
+        <div class="self-care animate delay-2">
+          <h4>💫 You've Got This! 💫</h4>
+          <p>Learning is your journey. Go at your pace and celebrate every small victory! 🌠📖</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Completion Message -->
+    <div class="completion animate">
+      <h3>🎉 Great Job! 🎉</h3>
+      <p>You've learned about linear inequalities! Remember that understanding takes time and practice.</p>
+      <p>🌟 <strong>Be proud of what you've accomplished today!</strong> 🌟</p>
+      <div class="emoji-row">
+        <span class="math-emoji">🥳</span>
+        <span class="math-emoji">👏</span>
+        <span class="math-emoji">💫</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Button -->
+  <div class="fab">
+    <i class="fas fa-book-open"></i>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">S</div>
+            Sentellect
+          </div>
+          <p>Personalizing learning through emotions to improve educational experience for HSSC Mathematics.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Platform</h3>
+          <ul>
+            <li><a href="#basics">Basics</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="#practice">Practice</a></li>
+            <li><a href="#game">Game</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#resources">Study Materials</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Account</h3>
+          <ul>
+            <li><a href="#">Student Login</a></li>
+            <li><a href="#">Create Account</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2024 Sentellect. Final Year Project - Educational Technology.</p>
+        <div class="footer-tags">
+          <a href="#" class="tag">Linear Inequalities</a>
+          <a href="#" class="tag">Stress-Free Learning</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize main chart
+    const ctx = document.getElementById('inequalityGraph').getContext('2d');
+    let inequalityChart = new Chart(ctx, {
+      type: 'scatter',
+      data: { datasets: [] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { min: -2, max: 8, grid: { color: '#ddd' } },
+          y: { min: -2, max: 8, grid: { color: '#ddd' } }
+        },
+        plugins: {
+          title: { display: true, text: 'Inequality Graph', font: { size: 16 } },
+          tooltip: { enabled: false }
+        }
+      }
+    });
+
+    // Initialize example charts
+    const budgetCtx = document.getElementById('budgetGraph').getContext('2d');
+    let budgetChart = new Chart(budgetCtx, {
+      type: 'scatter',
+      data: { datasets: [] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { min: 0, max: 12, title: { display: true, text: 'Books' } },
+          y: { min: 0, max: 25, title: { display: true, text: 'Notebooks' } }
+        },
+        plugins: {
+          title: { display: true, text: 'Budget: 10x + 5y ≤ 100', font: { size: 14 } }
+        }
+      }
+    });
+
+    const timeCtx = document.getElementById('timeGraph').getContext('2d');
+    let timeChart = new Chart(timeCtx, {
+      type: 'scatter',
+      data: { datasets: [] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { min: 0, max: 10, title: { display: true, text: 'Math Hours' } },
+          y: { min: 0, max: 10, title: { display: true, text: 'English Hours' } }
+        },
+        plugins: {
+          title: { display: true, text: 'Time: x + y ≤ 8 and x ≥ 2y', font: { size: 14 } }
+        }
+      }
+    });
+
+    // Initialize question chart
+    const question2Ctx = document.getElementById('question2Graph').getContext('2d');
+    let question2Chart = new Chart(question2Ctx, {
+      type: 'scatter',
+      data: { datasets: [] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { min: -5, max: 10, title: { display: true, text: 'x' } },
+          y: { min: -5, max: 10, title: { display: true, text: 'y' } }
+        },
+        plugins: {
+          title: { display: true, text: 'y ≥ x - 2', font: { size: 14 } }
+        }
+      }
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const animateElements = document.querySelectorAll('.animate');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const delay = entry.target.classList.contains('delay-1') ? 0.2 : 
+                         entry.target.classList.contains('delay-2') ? 0.4 :
+                         entry.target.classList.contains('delay-3') ? 0.6 : 0;
+            
+            setTimeout(() => {
+              entry.target.style.opacity = 1;
+              entry.target.style.transform = 'translateY(0)';
+            }, delay * 1000);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      animateElements.forEach(element => {
+        element.style.opacity = 0;
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+      });
+      
+      // Initialize charts
+      showInequality('2x + y ≤ 6');
+      initializeExamples();
+    });
+
+    // Show inequality graph
+    function showInequality(inequality) {
+      let datasets = [];
+      let explanation = "";
+      
+      switch(inequality) {
+        case '2x + y ≤ 6':
+          datasets = createInequalityDataset('2x + y = 6', '2x + y ≤ 6', (x) => 6 - 2*x, (x, y) => 2*x + y <= 6);
+          explanation = "<p><strong>2x + y ≤ 6</strong>: Solid line (≤). Test (0,0): 0 ≤ 6 ✓, shade region with (0,0).</p>";
+          break;
+        case '3x + 7y ≥ 21':
+          datasets = createInequalityDataset('3x + 7y = 21', '3x + 7y ≥ 21', (x) => (21 - 3*x)/7, (x, y) => 3*x + 7*y >= 21);
+          explanation = "<p><strong>3x + 7y ≥ 21</strong>: Solid line (≥). Test (0,0): 0 ≥ 21 ✗, shade opposite side.</p>";
+          break;
+      }
+      
+      inequalityChart.data.datasets = datasets;
+      inequalityChart.update();
+      document.getElementById('current-inequality').innerHTML = explanation;
+    }
+
+    // Create inequality dataset
+    function createInequalityDataset(lineLabel, regionLabel, lineFunc, regionFunc) {
+      let lineData = [];
+      let regionData = [];
+      
+      for(let x = -2; x <= 8; x++) {
+        lineData.push({x: x, y: lineFunc(x)});
+      }
+      
+      for(let x = -2; x <= 8; x += 0.5) {
+        for(let y = -2; y <= 8; y += 0.5) {
+          if (regionFunc(x, y)) {
+            regionData.push({x: x, y: y});
+          }
+        }
+      }
+      
+      return [
+        {
+          label: lineLabel,
+          data: lineData,
+          showLine: true,
+          borderColor: '#6a11cb',
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false
+        },
+        {
+          label: regionLabel,
+          data: regionData,
+          pointRadius: 0,
+          backgroundColor: 'rgba(106, 17, 203, 0.2)',
+          showLine: false,
+          fill: true
+        }
+      ];
+    }
+
+    // Initialize examples
+    function initializeExamples() {
+      // Budget example
+      budgetChart.data.datasets = createInequalityDataset(
+        '10x + 5y = 100', 
+        '10x + 5y ≤ 100', 
+        (x) => (100 - 10*x)/5, 
+        (x, y) => 10*x + 5*y <= 100
+      );
+      budgetChart.update();
+      
+      // Time management example
+      let timeDatasets = [
+        ...createInequalityDataset('x + y = 8', 'x + y ≤ 8', (x) => 8 - x, (x, y) => x + y <= 8),
+        ...createInequalityDataset('x = 2y', 'x ≥ 2y', (x) => x/2, (x, y) => x >= 2*y)
+      ];
+      timeDatasets[0].borderColor = '#6a11cb';
+      timeDatasets[1].backgroundColor = 'rgba(106, 17, 203, 0.2)';
+      timeDatasets[2].borderColor = '#2575fc';
+      timeDatasets[3].backgroundColor = 'rgba(37, 117, 252, 0.2)';
+      timeChart.data.datasets = timeDatasets;
+      timeChart.update();
+      
+      // Question 2
+      question2Chart.data.datasets = createInequalityDataset('y = x - 2', 'y ≥ x - 2', (x) => x - 2, (x, y) => y >= x - 2);
+      question2Chart.update();
+    }
+
+    // Show solution steps
+    function showSolution(elementId, step) {
+      const solutionDiv = document.getElementById(elementId);
+      const progressBar = document.getElementById(`progress${elementId.slice(3)}`);
+      
+      // Update progress bar
+      progressBar.style.width = `${step * 33}%`;
+      
+      // Different solutions for different questions
+      const solutions = {
+        sol1: [
+          "Step 1: Subtract 2x from both sides: 5x - 3 - 2x < 2x + 9 - 2x → 3x - 3 < 9",
+          "Step 2: Add 3 to both sides: 3x - 3 + 3 < 9 + 3 → 3x < 12",
+          "Answer: Divide both sides by 3: x < 4"
+        ],
+        sol2: [
+          "Step 1: Draw the line y = x - 2 (solid because of ≥)",
+          "Step 2: Test point (0,0): 0 ≥ 0 - 2 → 0 ≥ -2 ✓",
+          "Graph: Shade the region containing (0,0)"
+        ]
+      };
+      
+      solutionDiv.innerHTML = solutions[elementId][step-1];
+      solutionDiv.style.animation = 'fadeIn 0.5s ease';
+    }
+    
+    // Bubble game
+    let bubbleGameInterval;
+    let bubbleScore = 0;
+    let gameTime = 30;
+    
+    function startBubbleGame() {
+      document.getElementById('game-area').innerHTML = '';
+      bubbleScore = 0;
+      gameTime = 30;
+      document.getElementById('bubble-score').textContent = bubbleScore;
+      document.getElementById('game-time').textContent = gameTime;
+      
+      // Create bubbles
+      bubbleGameInterval = setInterval(() => {
+        if (gameTime <= 0) return;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble float';
+        const size = Math.random() * 50 + 30;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 90}%`;
+        bubble.style.bottom = '0px';
+        bubble.style.background = `rgba(${Math.random() * 100 + 100}, ${Math.random() * 100 + 100}, ${Math.random() * 255}, 0.7)`;
+        
+        // Add inequality content - some correct, some incorrect
+        const inequalities = [
+          { text: '2x+3<7', correct: true },
+          { text: '5≥10', correct: false },
+          { text: 'x-4≤2', correct: true },
+          { text: '3y>15', correct: true },
+          { text: '8<5', correct: false },
+          { text: 'x+5≥10', correct: true }
+        ];
+        
+        const inequality = inequalities[Math.floor(Math.random() * inequalities.length)];
+        bubble.textContent = inequality.text;
+        bubble.dataset.correct = inequality.correct;
+        
+        bubble.addEventListener('click', function() {
+          if (this.dataset.correct === 'true') {
+            bubbleScore++;
+            document.getElementById('bubble-score').textContent = bubbleScore;
+            this.style.background = '#84fab0';
+            setTimeout(() => this.remove(), 300);
+          } else {
+            this.style.background = '#ff6b6b';
+            setTimeout(() => this.remove(), 300);
+          }
+        });
+        
+        document.getElementById('game-area').appendChild(bubble);
+        
+        // Remove bubble after animation
+        setTimeout(() => {
+          if (bubble.parentNode) bubble.remove();
+        }, 5000);
+      }, 1000);
+      
+      // Game timer
+      const timer = setInterval(() => {
+        gameTime--;
+        document.getElementById('game-time').textContent = gameTime;
+        
+        if (gameTime <= 0) {
+          clearInterval(timer);
+          clearInterval(bubbleGameInterval);
+          setTimeout(() => {
+            alert(`Game over! Your score: ${bubbleScore}`);
+          }, 500);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

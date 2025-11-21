@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chill Math Café — Function Compositions + Function Inversion Quest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="game-page">
+  <div class="wrap">
+    <!-- ======== Chill Math Café Section ======== -->
+    <div class="game-header">
+      <div class="logo-icon">☕</div>
+      <div>
+        <h1>Chill Math Café</h1>
+        <div class="sub">
+          Serve comfy function-composition orders. Relaxed pace, cozy vibes — no pressure.
+        </div>
+      </div>
+    </div>
+
+    <div class="cafe">
+      <aside class="left">
+        <div class="barista">
+          <div class="avatar">Barista</div>
+          <div class="order" id="orderCard">
+            <h2 id="orderTitle">Welcome!</h2>
+            <p id="orderDesc">I'll explain the order when the shift begins. Click <strong>Start Shift</strong> to serve customers.</p>
+            <div class="hint" id="orderHint"></div>
+          </div>
+
+          <div class="controls">
+            <button id="startBtn">Start Shift</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="giveHint">Give me a hint</button>
+          </div>
+
+          <div class="dialogue" id="dialogue">
+            Barista: "Take it slow — breathe. Your cafe is calm. ☺️"
+          </div>
+        </div>
+      </aside>
+
+      <section class="right">
+        <div class="counter">
+          <div>
+            <div class="small">Orders served</div>
+            <div class="score" id="score">0</div>
+          </div>
+          <div>
+            <div class="small">Streak</div>
+            <div id="streak">0 🔥</div>
+          </div>
+        </div>
+
+        <div class="cups" id="cups"></div>
+
+        <div class="small" style="margin-top:12px">
+          Tip: Each customer requests one of <strong>f◦g</strong>, <strong>g◦f</strong>, <strong>f◦f</strong>, or <strong>g◦g</strong>. 
+          Click the cup that shows the right composed formula. Use the "Give me a hint" button if stuck.
+        </div>
+      </section>
+    </div>
+
+    <!-- ======== Function Inversion Quest Section ======== -->
+    <div class="game-section">
+      <h1>🧠 Function Inversion Quest</h1>
+      <p class="small">Follow Funcy’s hints, then enter the <strong>final inverse results!</strong></p>
+
+      <!-- Levels -->
+      <div class="quest-level" id="level1">
+        <h2>Level 1: f(x) = -2x + 8</h2>
+        <div class="steps">
+          <strong>Funcy’s Hints:</strong><br>
+          1️⃣ Write y = -2x + 8<br>
+          2️⃣ Swap → x = -2y + 8<br>
+          3️⃣ Solve for y → -2y = x - 8<br>
+          4️⃣ Simplify → y = (8 - x)/2<br>
+          🎯 Final Answer → f⁻¹(x) = ?
+        </div>
+        <input id="inv1" placeholder="Enter f⁻¹(x)">
+        <input id="inv1val" placeholder="Enter f⁻¹(-1)">
+        <button onclick="check(1)">Check</button>
+        <div class="result" id="res1"></div>
+      </div>
+
+      <div class="quest-level" id="level2">
+        <h2>Level 2: f(x) = 3x³ + 7</h2>
+        <div class="steps">
+          <strong>Funcy’s Hints:</strong><br>
+          1️⃣ y = 3x³ + 7<br>
+          2️⃣ Swap → x = 3y³ + 7<br>
+          3️⃣ x - 7 = 3y³<br>
+          4️⃣ y³ = (x - 7)/3<br>
+          🎯 Final Answer → f⁻¹(x) = ?
+        </div>
+        <input id="inv2" placeholder="Enter f⁻¹(x)">
+        <input id="inv2val" placeholder="Enter f⁻¹(-1)">
+        <button onclick="check(2)">Check</button>
+        <div class="result" id="res2"></div>
+      </div>
+
+      <div class="quest-level" id="level3">
+        <h2>Level 3: f(x) = (-x + 9)³</h2>
+        <div class="steps">
+          <strong>Funcy’s Hints:</strong><br>
+          1️⃣ y = (-x + 9)³<br>
+          2️⃣ Swap → x = (-y + 9)³<br>
+          3️⃣ Take cube root → x^(1/3) = -y + 9<br>
+          4️⃣ Solve for y → y = 9 - x^(1/3)<br>
+          🎯 Final Answer → f⁻¹(x) = ?
+        </div>
+        <input id="inv3" placeholder="Enter f⁻¹(x)">
+        <input id="inv3val" placeholder="Enter f⁻¹(-1)">
+        <button onclick="check(3)">Check</button>
+        <div class="result" id="res3"></div>
+      </div>
+
+      <div class="quest-level" id="level4">
+        <h2>Level 4: f(x) = (2x + 1)/(x - 1), x &gt; 1</h2>
+        <div class="steps">
+          <strong>Funcy’s Hints:</strong><br>
+          1️⃣ y(x - 1) = 2x + 1<br>
+          2️⃣ Expand → xy - y = 2x + 1<br>
+          3️⃣ Bring y-terms together → y(x - 2) = x + 1<br>
+          4️⃣ Solve for y → y = (x + 1)/(x - 2)<br>
+          🎯 Final Answer → f⁻¹(x) = ?
+        </div>
+        <input id="inv4" placeholder="Enter f⁻¹(x)">
+        <input id="inv4val" placeholder="Enter f⁻¹(-1)">
+        <button onclick="check(4)">Check</button>
+        <div class="result" id="res4"></div>
+      </div>
+
+      <div id="win">🎉 You completed all levels! Funcy salutes your algebra powers! 🧠🚀</div>
+    </div>
+    
+<!-- =======================
+     🍹 MATH SMOOTHIE BAR GAME
+     ======================= -->
+<div class="game-section" id="smoothieGame">
+  <h1>🍹 Math Smoothie Bar — Domain & Range Mixer</h1>
+  <p class="small">Help the Barista match the correct <strong>Domain</strong> and <strong>Range</strong> for each inverse function — no need to find the inverse!</p>
+
+  <div class="smoothie-cards">
+    <!-- Card 1 -->
+    <div class="smoothie-card" data-domain="[−2, ∞)" data-range="[0, ∞)">
+      <div class="function">f(x) = √(x + 2)</div>
+      <div class="mix-area">Drop your Domain and Range here 👇</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="smoothie-card" data-domain="x ≠ −3" data-range="y ≠ 0">
+      <div class="function">f(x) = 1 / (x + 3), x ≠ −3</div>
+      <div class="mix-area">Drop your Domain and Range here 👇</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="smoothie-card" data-domain="x ≠ 4" data-range="y ≠ 1">
+      <div class="function">f(x) = (x − 1)/(x − 4), x ≠ 4</div>
+      <div class="mix-area">Drop your Domain and Range here 👇</div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="smoothie-card" data-domain="[5, ∞)" data-range="[0, ∞)">
+      <div class="function">f(x) = (x − 5)², x ≥ 5</div>
+      <div class="mix-area">Drop your Domain and Range here 👇</div>
+    </div>
+  </div>
+
+  <div class="juice-options">
+    <div class="tag" draggable="true">Domain: [−2, ∞)</div>
+    <div class="tag" draggable="true">Range: [0, ∞)</div>
+    <div class="tag" draggable="true">Domain: x ≠ −3</div>
+    <div class="tag" draggable="true">Range: y ≠ 0</div>
+    <div class="tag" draggable="true">Domain: x ≠ 4</div>
+    <div class="tag" draggable="true">Range: y ≠ 1</div>
+    <div class="tag" draggable="true">Domain: [5, ∞)</div>
+  </div>
+
+  <div id="mixResult" class="result"></div>
+</div>
+
+<!-- ===================== LIMIT EXPLORER GAME CARD ===================== -->
+<div class="game-section">
+  <h1>🧮 Limit Explorer</h1>
+  <p class="small">
+    Move the slider or use approach buttons to explore how each limit behaves using limit theorems.
+  </p>
+
+  <div class="limit-card">
+    <div class="limit-header">
+      <label for="limitSelect">Select Limit Problem:</label>
+      <select id="limitSelect">
+        <option value="1">(i) limₓ→3 (2x + 4)</option>
+        <option value="2">(ii) limₓ→1 (3x² − 2x + 4)</option>
+        <option value="3">(iii) limₓ→3 √(x² + x + 4)</option>
+        <option value="4">(iv) limₓ→2 √(x² − 4)</option>
+        <option value="5">(v) limₓ→2 [√(x²+1) − √(x²+5)]</option>
+        <option value="6">(vi) limₓ→2 (2x³ + 5x) / (3x − 2)</option>
+      </select>
+    </div>
+
+    <div class="limit-body">
+      <canvas id="limitCanvas" width="700" height="280"></canvas>
+
+      <div class="limit-controls">
+        <label>x → <span id="limitA">3</span></label>
+        <input type="range" id="limitSlider" min="-5" max="5" step="0.01" value="0">
+        <div class="limit-values">
+          <div>x = <span id="xVal">0</span></div>
+          <div>f(x) = <span id="yVal">—</span></div>
+        </div>
+      </div>
+
+      <div class="limit-buttons">
+        <button id="leftBtn">Approach Left</button>
+        <button id="stopBtn" class="ghost">Stop</button>
+        <button id="rightBtn">Approach Right</button>
+      </div>
+
+      <div class="limit-steps">
+        <h3 id="limitTitle">Problem:</h3>
+        <p id="limitDesc">Explore using the slider to approach the point.</p>
+        <ul id="limitSteps"></ul>
+        <div id="limitResult" class="result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ==================================================================== -->
+<!-- Limits Explorer — Calm Interactive (HTML) -->
+<div id="limits-explorer" class="limits-explorer" aria-label="Limits Explorer widget">
+
+
+  <div class="le-main">
+   
+    <section class="le-left">
+        <div class="le-header">
+    <div class="le-title">Limits Explorer — Calm Mode</div>
+    <div class="le-sub">Move x slowly toward a, watch both sides, read step-by-step help. No pressure.</div>
+        </div>
+      <canvas id="leCanvas" class="le-canvas" aria-hidden="true"></canvas>
+
+      <div class="le-info">
+        <div>Problem: <span id="leProblemTitle" class="mono"></span></div>
+        <div>Target a = <input id="leA" type="number" step="0.1" class="small-num" value="1" /></div>
+        <div>Current x = <span id="leXVal">-2.00</span></div>
+        <div>f(x) ≈ <span id="leYVal">—</span></div>
+      </div>
+
+      <div class="le-controls">
+        <button id="lePlay" class="btn">Play</button>
+        <button id="leStep" class="btn ghost">Step</button>
+        <button id="leReveal" class="btn ghost">Reveal Limit</button>
+        <button id="leHint" class="btn ghost">Reveal Steps</button>
+      </div>
+
+      <div id="leStepsBox" class="le-steps" hidden aria-live="polite"></div>
+    </section>
+
+    <aside class="le-right">
+      <div class="le-select-row">
+        <label for="leProblem">Choose problem</label>
+        <select id="leProblem"></select>
+      </div>
+
+      <div class="le-mode-row">
+        <label>Approach side</label>
+        <select id="leSide">
+          <option value="both">Both sides (visual)</option>
+          <option value="left">Left only (x → a⁻)</option>
+          <option value="right">Right only (x → a⁺)</option>
+        </select>
+      </div>
+
+      <div class="le-slider-row">
+        <label>Move x</label>
+        <input id="leSlider" type="range" min="-10" max="10" step="0.01" value="-2">
+      </div>
+
+      <div class="le-extras">
+        <div class="note">Tip: Slide slowly. Press Play to watch automatic approach. Click Reveal Steps to read calmly.</div>
+        <div class="final-answer" id="leRevealAnswer" hidden>Limit: <span id="leAnswerText" class="mono"></span></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Limits Explorer 2 — Problems from new image -->
+<div class="card"> <!-- keep your card wrapper (or ensure this sits inside one) -->
+  <div id="limits-explorer-2">
+    
+
+    <div class="le2-main">
+      <section class="le2-left">
+        <canvas id="le2Canvas" class="le2-canvas" aria-hidden="true"></canvas>
+      <div class="le2-header">
+      <div class="le2-title">Limits Explorer — New Set</div>
+      <div class="le2-sub">Calm, step-by-step view of trigonometric limits and e-limits. No pressure.</div>
+      </div>
+        <div class="le2-info">
+          <div>Problem: <span id="le2ProblemTitle" class="le2-mono"></span></div>
+          <div>Target a = <input id="le2A" type="number" step="0.1" class="le2-small-num" /></div>
+          <div>Current x = <span id="le2XVal">—</span></div>
+          <div>f(x) ≈ <span id="le2YVal">—</span></div>
+        </div>
+
+        <div class="le2-controls">
+          <button id="le2Play" class="le2-btn">Play</button>
+          <button id="le2Step" class="le2-btn ghost">Step</button>
+          <button id="le2Reveal" class="le2-btn ghost">Reveal Limit</button>
+          <button id="le2Hint" class="le2-btn ghost">Reveal Steps</button>
+        </div>
+
+        <div id="le2StepsBox" class="le2-steps" hidden aria-live="polite"></div>
+      </section>
+
+      <aside class="le2-right">
+        <div class="le2-select-row">
+          <label for="le2Problem">Choose problem</label>
+          <select id="le2Problem"></select>
+        </div>
+
+        <div class="le2-mode-row">
+          <label>Approach side</label>
+          <select id="le2Side">
+            <option value="both">Both sides (visual)</option>
+            <option value="left">Left only (x → a⁻)</option>
+            <option value="right">Right only (x → a⁺)</option>
+          </select>
+        </div>
+
+        <div class="le2-slider-row">
+          <label>Move x</label>
+          <input id="le2Slider" type="range" min="-10" max="10" step="0.01" value="-2">
+        </div>
+
+        <div class="le2-extras">
+          <div class="note">Tip: Slide slowly or press Play. Reveal Steps unfolds algebra slowly.</div>
+          <div class="final-answer" id="le2RevealAnswer" hidden>Limit: <span id="le2AnswerText" class="le2-mono"></span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- Limits Explorer 3 — Left/Right Visualizer (HTML) -->
+<div class="card">
+  <div id="le3-explorer">
+   
+
+    <div class="le3-main">
+      <section class="le3-left">
+        <canvas id="le3Canvas" class="le3-canvas" aria-hidden="true"></canvas>
+       <div class="le3-header">
+      <div class="le3-title">Limits Explorer — Left & Right</div>
+      <div class="le3-sub">Gently explore left-hand and right-hand limits. Slide slowly or press Play.</div>
+       </div>
+        <div class="le3-info">
+          <div>Problem: <span id="le3ProblemTitle" class="le3-mono">—</span></div>
+          <div>Target c = <input id="le3A" type="number" step="0.1" class="le3-small-num" /></div>
+          <div>Current x = <span id="le3XVal">—</span></div>
+          <div>f(x) ≈ <span id="le3YVal">—</span></div>
+        </div>
+
+        <div class="le3-controls">
+          <button id="le3Play" class="le3-btn">Play</button>
+          <button id="le3Step" class="le3-btn ghost">Step</button>
+          <button id="le3Reveal" class="le3-btn ghost">Reveal Limit</button>
+          <button id="le3Hint" class="le3-btn ghost">Reveal Steps</button>
+        </div>
+
+        <div id="le3StepsBox" class="le3-steps" hidden aria-live="polite"></div>
+        <div id="le3RevealAnswer" class="le3-final" hidden>Limit: <span id="le3AnswerText" class="le3-mono"></span></div>
+      </section>
+
+      <aside class="le3-right">
+        <div class="le3-select-row">
+          <label for="le3Problem">Choose problem</label>
+          <select id="le3Problem">
+            <option value="p1">(i) f(x)=2x² + x − 5, c = 1</option>
+            <option value="p2">(ii) f(x)=(x² − 9)/(x − 3) — try c = 3 or c = -3</option>
+            <option value="p3">(iii) f(x)=|x − 5|, c = 5</option>
+          </select>
+        </div>
+
+        <div class="le3-mode-row">
+          <label>Approach side</label>
+          <select id="le3Side">
+            <option value="both">Both sides (visual)</option>
+            <option value="left">Left only (x → c⁻)</option>
+            <option value="right">Right only (x → c⁺)</option>
+          </select>
+        </div>
+
+        <div class="le3-slider-row">
+          <label>Move x</label>
+          <input id="le3Slider" type="range" min="-10" max="10" step="0.01" value="-2">
+        </div>
+
+        <div class="le3-extras">
+          <div class="le3-note">Tip: slide slowly. Set c to 3 or -3 for problem (ii) to see difference. Steps explain algebra calmly.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  </div>
+
+  <!-- Overlay Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal" id="modalText"></div>
+  </div>
+
+  <script>
+    /* =============== Chill Math Café Logic =============== */
+    const problems = [
+      { f: '2x + 1', g: '3/(x - 1)', note: 'x ≠ 1' },
+      { f: '√(x + 1)', g: '1/x^2', note: 'x ≠ 0' },
+      { f: '1/√(x - 1)', g: '(x^2 + 1)^2', note: 'x ≠ 1' },
+      { f: '3x^4 - 2x^2', g: '2/√x', note: 'x ≠ 0' }
+    ];
+
+    const compNames = [
+      { code: 'fog', label: '(f ∘ g)(x) — f(g(x))' },
+      { code: 'gof', label: '(g ∘ f)(x) — g(f(x))' },
+      { code: 'fof', label: '(f ∘ f)(x) — f(f(x))' },
+      { code: 'gog', label: '(g ∘ g)(x) — g(g(x))' }
+    ];
+
+    function composeText(type, f, g) {
+      if (type === 'fog') return 'f(g(x)) = ' + f.replace(/x/g, '(' + g + ')');
+      if (type === 'gof') return 'g(f(x)) = ' + g.replace(/x/g, '(' + f + ')');
+      if (type === 'fof') return 'f(f(x)) = ' + f.replace(/x/g, '(' + f + ')');
+      if (type === 'gog') return 'g(g(x)) = ' + g.replace(/x/g, '(' + g + ')');
+      return '';
+    }
+
+    let orderQueue = [], current = null, served = 0, streak = 0, paused = false;
+
+    const orderTitle = document.getElementById('orderTitle');
+    const orderDesc = document.getElementById('orderDesc');
+    const orderHint = document.getElementById('orderHint');
+    const cupsEl = document.getElementById('cups');
+    const scoreEl = document.getElementById('score');
+    const streakEl = document.getElementById('streak');
+    const dialogue = document.getElementById('dialogue');
+    const overlay = document.getElementById('overlay');
+    const modalText = document.getElementById('modalText');
+
+    document.getElementById('startBtn').addEventListener('click', startShift);
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      paused = !paused;
+      document.getElementById('pauseBtn').textContent = paused ? 'Resume' : 'Pause';
+      showMsg(paused ? 'Shift paused. Take a breath.' : 'Back to serving!');
+    });
+    document.getElementById('giveHint').addEventListener('click', () => {
+      if (current) showHint(); else showMsg('No current order yet. Start the shift!');
+    });
+
+    function startShift() {
+      orderQueue = [];
+      for (let p of problems) {
+        const picks = ['fog', 'gof', 'fof', 'gog'].sort(() => Math.random() - 0.5).slice(0, 2);
+        for (let t of picks) orderQueue.push({ p, t });
+      }
+      orderQueue.sort(() => Math.random() - 0.5);
+      served = 0; streak = 0;
+      updateScore(); nextOrder();
+      showMsg('Shift started — welcome to the Chill Math Café!');
+    }
+
+    function nextOrder() {
+      if (paused) return;
+      if (orderQueue.length === 0) { showModal('All customers served — nice work! Take a break ☕'); return; }
+      current = orderQueue.shift(); renderOrder(current);
+    }
+
+    function renderOrder({ p, t }) {
+      orderTitle.textContent = `Customer order: ${compNames.find(c => c.code === t).label}`;
+      orderDesc.innerHTML = `f(x) = <strong>${p.f}</strong><br>g(x) = <strong>${p.g}</strong><br><span class='small'>${p.note}</span>`;
+      orderHint.textContent = '';
+      const correct = composeText(t, p.f, p.g);
+      const opts = makeCups(correct, p, t);
+      renderCups(opts, correct);
+    }
+
+    function makeCups(correct, p, t) {
+      const swapped = composeText(t.replace('f', 'TEMP').replace('g', 'f').replace('TEMP', 'g'), p.f, p.g);
+      const careless = correct.replace(/\(/g, '').replace(/\)/g, '');
+      return [correct, careless, swapped].sort(() => Math.random() - 0.5);
+    }
+
+    function renderCups(opts, correct) {
+      cupsEl.innerHTML = '';
+      for (let text of opts) {
+        const cup = document.createElement('div');
+        cup.className = 'cup';
+        cup.innerHTML = `<div class="top">☕</div><div class="text">${escapeHtml(text)}</div>`;
+        cup.addEventListener('click', () => chooseCup(cup, text, correct));
+        cupsEl.appendChild(cup);
+      }
+    }
+
+    function chooseCup(cup, text, correct) {
+      if (paused) return showMsg('Resume the shift to serve.');
+      if (text === correct) {
+        cup.classList.add('correct'); served++; streak++; showMsg('Customer: "Perfect! Thank you 😊"');
+        setTimeout(() => { updateScore(); setTimeout(nextOrder, 800); }, 600);
+      } else {
+        cup.classList.add('wrong'); streak = 0; showMsg('Customer: "Hmm, that’s not right — try again."');
+      }
+      updateScore();
+    }
+
+    function updateScore() { scoreEl.textContent = served; streakEl.textContent = (streak > 0 ? streak : '0') + ' 🔥'; }
+    function showHint() { if (!current) return; orderHint.textContent = 'Hint: Replace x carefully and watch parentheses.'; }
+    function showMsg(msg) { dialogue.textContent = 'Barista: "' + msg + '"'; }
+    function showModal(text) { modalText.innerHTML = `<h3>${text}</h3><p style="margin-top:12px"><button onclick="closeModal()">Continue</button></p>`; overlay.classList.add('show'); }
+    function closeModal() { overlay.classList.remove('show'); }
+    function escapeHtml(s) { return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
+    /* =============== Function Inversion Quest Logic =============== */
+    const answers = {
+      1: { inv: "(8-x)/2", val: "4.5" },
+      2: { inv: "((x-7)/3)^(1/3)", val: "-(8/3)^(1/3)" },
+      3: { inv: "9-x^(1/3)", val: "10" },
+      4: { inv: "(x+1)/(x-2)", val: "0" }
+    };
+
+    let score2 = 0;
+    function normalize(str) { return str.replace(/\s+/g, '').replaceAll('**', '^').toLowerCase(); }
+
+    function check(level) {
+      const inv = normalize(document.getElementById(`inv${level}`).value);
+      const val = normalize(document.getElementById(`inv${level}val`).value);
+      const res = document.getElementById(`res${level}`);
+      if (inv === normalize(answers[level].inv) && val === normalize(answers[level].val)) {
+        res.innerHTML = "✅ Correct! Funcy dances happily!";
+        res.className = "result success";
+        score2++;
+      } else {
+        res.innerHTML = "❌ Oops! Check your algebra and try again!";
+        res.className = "result error";
+      }
+      if (score2 === 4) document.getElementById("win").style.display = "block";
+    }
+
+
+/* 🍹 DOMAIN & RANGE MIXER LOGIC */
+const tags = document.querySelectorAll(".tag");
+const cards = document.querySelectorAll(".smoothie-card");
+const mixResult = document.getElementById("mixResult");
+let currentDragged = null;
+
+tags.forEach(tag => {
+  tag.addEventListener("dragstart", e => {
+    currentDragged = e.target;
+    e.target.style.opacity = "0.6";
+  });
+  tag.addEventListener("dragend", e => e.target.style.opacity = "1");
+});
+
+cards.forEach(card => {
+  card.addEventListener("dragover", e => e.preventDefault());
+  card.addEventListener("drop", e => {
+    e.preventDefault();
+    const mixArea = card.querySelector(".mix-area");
+    const text = currentDragged.textContent;
+    if (!mixArea.textContent.includes(text)) {
+      mixArea.innerHTML += `<div>${text}</div>`;
+    }
+    checkMatch(card);
+  });
+});
+
+function checkMatch(card) {
+  const mixText = card.querySelector(".mix-area").textContent;
+  const domain = card.dataset.domain;
+  const range = card.dataset.range;
+  if (mixText.includes(domain) && mixText.includes(range)) {
+    card.classList.add("correct");
+    mixResult.innerHTML = `✅ Perfect mix! You matched ${card.querySelector(".function").textContent}`;
+    mixResult.className = "result success";
+  }
+}
+
+
+
+/* ------------------- Limit Explorer Script (Fixed) ------------------- */
+
+const limitProblems = {
+  1: { expr: x => 2*x + 4, a: 3, steps: ["Polynomial → continuous.", "Apply substitution.", "f(3)=10"], result: "10" },
+  2: { expr: x => 3*x*x - 2*x + 4, a: 1, steps: ["Polynomial → continuous.", "Direct substitution.", "f(1)=5"], result: "5" },
+  3: { expr: x => Math.sqrt(x*x + x + 4), a: 3, steps: ["Inside polynomial continuous.", "Direct substitution.", "√(3²+3+4)=√16=4"], result: "4" },
+  4: { expr: x => (x*x - 4 >= 0 ? Math.sqrt(x*x - 4) : NaN), a: 2, steps: ["Domain: x≤−2 or x≥2.", "Left side invalid → Right-hand limit only.", "lim→2⁺ √(x²−4)=0"], result: "Right-hand = 0" },
+  5: { expr: x => Math.sqrt(x*x+1)-Math.sqrt(x*x+5), a: 2, steps: ["Continuous under root.", "Direct substitution.", "√5−3 ≈ -0.764"], result: "≈ -0.764" },
+  6: { expr: x => (3*x-2!==0)?(2*x*x*x+5*x)/(3*x-2):NaN, a: 2, steps: ["Rational function.", "Denominator nonzero.", "f(2)=26/4=6.5"], result: "6.5" },
+};
+
+const limitSelect = document.getElementById("limitSelect");
+const limitCanvas = document.getElementById("limitCanvas");
+const ctx2 = limitCanvas.getContext("2d");
+const limitSlider = document.getElementById("limitSlider");
+const xValEl = document.getElementById("xVal");
+const yValEl = document.getElementById("yVal");
+const limitTitle = document.getElementById("limitTitle");
+const limitDesc = document.getElementById("limitDesc");
+const limitSteps = document.getElementById("limitSteps");
+const limitResult = document.getElementById("limitResult");
+
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+const stopBtn = document.getElementById("stopBtn");
+
+let limitCurrent = 1;  // ✅ renamed
+let limitAnimId = null;
+let limitA = 3;
+
+/* Draw the function graph */
+function drawLimitGraph() {
+  ctx2.clearRect(0, 0, limitCanvas.width, limitCanvas.height);
+  ctx2.beginPath();
+  ctx2.strokeStyle = "#f0c087"; // orange accent
+  ctx2.lineWidth = 2;
+
+  for (let x = -5; x <= 5; x += 0.05) {
+    const y = limitProblems[limitCurrent].expr(x);
+    if (isNaN(y)) continue;
+    const px = 350 + x * 60;
+    const py = 140 - y * 25;
+    if (x === -5) ctx2.moveTo(px, py);
+    else ctx2.lineTo(px, py);
+  }
+  ctx2.stroke();
+
+  // Mark limit point
+  const yA = limitProblems[limitCurrent].expr(limitA);
+  if (!isNaN(yA)) {
+    ctx2.beginPath();
+    ctx2.arc(350 + limitA * 60, 140 - yA * 25, 6, 0, Math.PI * 2);
+    ctx2.fillStyle = "#ffb347";
+    ctx2.fill();
+  }
+}
+
+/* Update slider display */
+function updateLimit() {
+  const x = parseFloat(limitSlider.value);
+  const f = limitProblems[limitCurrent].expr(x);
+  xValEl.textContent = x.toFixed(2);
+  yValEl.textContent = isNaN(f) ? "undefined" : f.toFixed(3);
+  drawLimitGraph();
+}
+
+/* Load problem data */
+function loadLimitProblem(n) {
+  limitCurrent = parseInt(n);
+  const p = limitProblems[limitCurrent];
+  limitA = p.a;
+  document.getElementById("limitA").textContent = limitA;
+  limitTitle.textContent = `Problem ${n}`;
+  limitDesc.textContent = p.steps[0];
+  limitSteps.innerHTML = p.steps.map(s => `<li>${s}</li>`).join("");
+  limitResult.textContent = `Limit = ${p.result}`;
+  updateLimit();
+}
+
+/* Animate approach */
+function animateApproach(dir) {
+  cancelAnimationFrame(limitAnimId);
+  const p = limitProblems[limitCurrent];
+  const start = dir === "left" ? p.a - 3 : p.a + 3;
+  const end = p.a;
+  let x = start;
+  function step() {
+    if ((dir === "left" && x < end) || (dir === "right" && x > end)) return;
+    limitSlider.value = x;
+    updateLimit();
+    x += dir === "left" ? 0.05 : -0.05;
+    limitAnimId = requestAnimationFrame(step);
+  }
+  step();
+}
+
+function stopApproach() {
+  cancelAnimationFrame(limitAnimId);
+}
+
+/* Event bindings */
+limitSelect.addEventListener("change", e => loadLimitProblem(e.target.value));
+limitSlider.addEventListener("input", updateLimit);
+leftBtn.addEventListener("click", () => animateApproach("left"));
+rightBtn.addEventListener("click", () => animateApproach("right"));
+stopBtn.addEventListener("click", stopApproach);
+
+/* Initialize */
+loadLimitProblem(1);
+
+/* Limits Explorer — interactive logic (IIFE, safe to drop) */
+(function() {
+  const problems = [
+    { id:1, title:"(i) lim_{x→1} (x^3 - x)/(x + 1)", fExpr:"(x*x*x - x)/(x + 1)", hint:"Try substitute x=1 first.", steps:["Substitute x=1: numerator 0, denominator 2 → 0. So limit = 0."], ans:0, aDefault:1 },
+    { id:2, title:"(ii) lim_{x→0} (3x^3 + 4x)/(x^2 + x)", fExpr:"(3*x*x*x + 4*x)/(x*x + x)", hint:"Factor x from numerator and denominator.", steps:["Factor x: x(3x^2+4)/x(x+1). Cancel x → (3x^2+4)/(x+1). Substitute x=0 gives 4."], ans:4, aDefault:0 },
+    { id:3, title:"(iii) lim_{x→2} (x^3 - 8)/(x^2 + x - 6)", fExpr:"(x*x*x - 8)/(x*x + x - 6)", hint:"Factor (x-2) and cancel.", steps:["x^3-8=(x-2)(x^2+2x+4). Denominator=(x-2)(x+3). Cancel (x-2). Substitute x=2 → 12/5."], ans:12/5, aDefault:2 },
+    { id:4, title:"(iv) lim_{x→1} (x^3 - 3x^2 + 3x - 1)/(x^3 - x)", fExpr:"(x*x*x - 3*x*x + 3*x - 1)/(x*x*x - x)", hint:"Numerator is (x-1)^3; cancel (x-1).", steps:["Simplify and substitute → 0."], ans:0, aDefault:1 },
+    { id:5, title:"(v) lim_{x→1} (x^3 + x^2)/(x^2 - 1)", fExpr:"(x*x*x + x*x)/(x*x - 1)", hint:"Denominator → 0, check one-sided limits.", steps:["Substitute x=1: numerator 2, denominator 0. One side → +∞, other → -∞ → limit does not exist."], ans:null, aDefault:1 },
+    { id:6, title:"(vi) lim_{x→4} (2x^2 - 32)/(x^3 - 4x^2)", fExpr:"(2*x*x - 32)/(x*x*x - 4*x*x)", hint:"Factor (x-4) and cancel.", steps:["Simplify to 2(x+4)/x^2 and substitute x=4 → 1."], ans:1, aDefault:4 },
+    { id:7, title:"(vii) lim_{x→2} (sqrt(x) - sqrt(2))/(x - 2)", fExpr:"(Math.sqrt(x) - Math.sqrt(2))/(x - 2)", hint:"Multiply by conjugate.", steps:["Multiply by (√x+√2): result → 1/(√x+√2). Substitute x=2 → 1/(2√2)."], ans:1/(2*Math.sqrt(2)), aDefault:2 },
+    { id:8, title:"(viii) lim_{h→0} (sqrt(x+h) - sqrt(x))/h", fExpr:null, hint:"This is derivative of sqrt(x): 1/(2√x).", steps:["Multiply by conjugate; letting h→0 gives 1/(2√x)."], ans:'symbolic', aDefault:0 },
+    { id:9, title:"(ix) lim_{x→a} (x^n - a^n)/(x - a)", fExpr:null, hint:"Standard formula: n * a^(n-1).", steps:["Factor and cancel → n * a^(n-1)."], ans:'formula', aDefault:1 }
+  ];
+
+  // DOM
+  const root = document.getElementById('limits-explorer');
+  if (!root) return;
+  const canvas = root.querySelector('#leCanvas');
+  const ctx = canvas.getContext('2d');
+  const problemSelect = root.querySelector('#leProblem');
+  const slider = root.querySelector('#leSlider');
+  const aInput = root.querySelector('#leA');
+  const xVal = root.querySelector('#leXVal');
+  const yVal = root.querySelector('#leYVal');
+  const playBtn = root.querySelector('#lePlay');
+  const stepBtn = root.querySelector('#leStep');
+  const revealBtn = root.querySelector('#leReveal');
+  const hintBtn = root.querySelector('#leHint');
+  const stepsBox = root.querySelector('#leStepsBox');
+  const problemTitle = root.querySelector('#leProblemTitle');
+  const sideSelect = root.querySelector('#leSide');
+  const revealAnswer = root.querySelector('#leRevealAnswer');
+  const revealText = root.querySelector('#leAnswerText');
+
+  // state
+  let idx = 0;
+  let a = problems[0].aDefault;
+  let x = parseFloat(slider.value);
+  let playing = false;
+  let leftX = x - 1.6, rightX = x + 1.6;
+  let raf = null;
+
+  // canvas sizing
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    draw();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // populate problems dropdown
+  problems.forEach((p, i) => {
+    const opt = document.createElement('option'); opt.value = i; opt.textContent = p.title;
+    problemSelect.appendChild(opt);
+  });
+
+  // utilities
+  function safeEvalF(expr, xv) {
+    try {
+      if (!expr) return NaN;
+      return Function('x','return (' + expr + ')')(xv);
+    } catch (e) { return NaN; }
+  }
+
+  function setProblem(i) {
+    idx = i;
+    const p = problems[i];
+    problemTitle.textContent = p.title;
+    a = ('aDefault' in p) ? p.aDefault : 1;
+    aInput.value = a;
+    revealAnswer.hidden = true;
+    stepsBox.hidden = true;
+    revealText.textContent = '';
+    // set slider to a sensible start
+    slider.value = Math.max(-9, Math.min(9, a - 3));
+    x = parseFloat(slider.value);
+    leftX = x - 1; rightX = x + 1;
+    draw();
+  }
+
+  // draw axes + function + approach points
+  function draw() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    // background
+    ctx.fillStyle = '#f8fafc'; ctx.fillRect(0,0,w,h);
+
+    // transform: map x in [a-6, a+6] to canvas width
+    const span = 6;
+    const xmin = a - span, xmax = a + span;
+    const ymin = -5, ymax = 5;
+
+    function toPx(mx,my) { const px = (mx - xmin)/(xmax - xmin) * w; const py = (1 - (my - ymin)/(ymax - ymin)) * h; return {x:px,y:py}; }
+
+    // draw grid
+    ctx.strokeStyle = 'rgba(15,23,42,0.06)'; ctx.lineWidth = 1;
+    for (let gx = Math.ceil(xmin); gx <= Math.floor(xmax); gx++) {
+      const p = toPx(gx,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,h); ctx.stroke();
+    }
+
+    // x-axis
+    const y0 = toPx(a,0).y; ctx.strokeStyle = 'rgba(15,23,42,0.12)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(0,y0); ctx.lineTo(w,y0); ctx.stroke();
+
+    // target vertical line at x=a
+    const pa = toPx(a,0); ctx.strokeStyle = 'rgba(99,102,241,0.18)'; ctx.setLineDash([6,6]); ctx.beginPath(); ctx.moveTo(pa.x,0); ctx.lineTo(pa.x,h); ctx.stroke(); ctx.setLineDash([]);
+
+    // draw function
+    const p = problems[idx];
+    if (p.fExpr) {
+      ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.2; ctx.beginPath();
+      const steps = Math.max(120, Math.floor(w/3));
+      for (let i=0;i<=steps;i++){
+        const t = i/steps; const mx = xmin + t*(xmax-xmin);
+        const my = safeEvalF(p.fExpr, mx);
+        if (!isFinite(my)) { ctx.moveTo(-100,-100); continue; }
+        const pt = toPx(mx,my);
+        if (i===0) ctx.moveTo(pt.x,pt.y); else ctx.lineTo(pt.x,pt.y);
+      }
+      ctx.stroke();
+    } else {
+      // function undefined (symbolic) — show subtle text
+      ctx.fillStyle = 'rgba(15,23,42,0.12)'; ctx.font = '14px Inter, sans-serif'; ctx.fillText('Function is symbolic for this problem', 14, 20);
+    }
+
+    // compute left/right y
+    const leftMode = (sideSelect.value === 'left');
+    const rightMode = (sideSelect.value === 'right');
+    const leftTarget = (sideSelect.value === 'right') ? a + 0.01 : a - 0.001;
+    const rightTarget = (sideSelect.value === 'left') ? a - 0.01 : a + 0.001;
+
+    // approach nodes: leftX & rightX move slowly toward targets or toward slider mean
+    const mean = x;
+    leftX += (Math.min(a-0.0005, mean) - leftX) * 0.08;
+    rightX += (Math.max(a+0.0005, mean) - rightX) * 0.08;
+
+    const yL = p.fExpr ? safeEvalF(p.fExpr, leftX) : NaN;
+    const yR = p.fExpr ? safeEvalF(p.fExpr, rightX) : NaN;
+
+    // draw left point
+    if (isFinite(yL)) {
+      const pL = toPx(leftX, yL);
+      drawGlow(pL.x, pL.y, 20, 'rgba(124,58,237,0.08)');
+      drawDot(pL.x, pL.y, 10, '#7c3aed');
+    }
+    // draw right point
+    if (isFinite(yR)) {
+      const pR = toPx(rightX, yR);
+      drawGlow(pR.x, pR.y, 16, 'rgba(96,165,250,0.07)');
+      drawDot(pR.x, pR.y, 8, '#2563eb');
+    }
+
+    // update numeric displays using the mean of visible points
+    const visX = (leftX + rightX) / 2;
+    const visY = p.fExpr ? safeEvalF(p.fExpr, visX) : NaN;
+    xVal.textContent = visX.toFixed(3);
+    yVal.textContent = isFinite(visY) ? visY.toFixed(4) : '—';
+
+    // helper drawing functions
+    function drawDot(cx,cy,r,fill) { ctx.save(); ctx.beginPath(); ctx.fillStyle = fill; ctx.shadowColor = fill; ctx.shadowBlur = 12; ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    function drawGlow(cx,cy,rad,color) { ctx.save(); ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(cx,cy,rad,rad/2,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+  }
+
+  // animation loop when playing
+  function animate() {
+    if (!playing) { if (raf) cancelAnimationFrame(raf); raf = null; return; }
+    // nudge slider toward a
+    const cur = parseFloat(slider.value);
+    const delta = (a - cur) * 0.02;
+    slider.value = (cur + delta).toFixed(3);
+    x = parseFloat(slider.value);
+    draw();
+    raf = requestAnimationFrame(animate);
+  }
+
+  // controls
+  problemSelect.addEventListener('change', ()=> setProblem(parseInt(problemSelect.value)));
+  slider.addEventListener('input', ()=> { x = parseFloat(slider.value); leftX = x - 0.6; rightX = x + 0.6; draw(); });
+  aInput.addEventListener('input', ()=> { a = parseFloat(aInput.value); draw(); });
+  sideSelect.addEventListener('change', ()=> draw());
+
+  playBtn.addEventListener('click', ()=>{
+    playing = !playing;
+    playBtn.textContent = playing ? 'Pause' : 'Play';
+    if (playing) animate(); else { if (raf) cancelAnimationFrame(raf); raf = null; }
+  });
+
+  stepBtn.addEventListener('click', ()=>{
+    // gently move both points closer to a
+    leftX += (a - leftX) * 0.3;
+    rightX += (a - rightX) * 0.3;
+    // move slider to mean
+    const mean = (leftX + rightX) / 2;
+    slider.value = mean.toFixed(3); x = mean;
+    draw();
+  });
+
+  hintBtn.addEventListener('click', ()=> {
+    stepsBox.hidden = false;
+    stepsBox.innerHTML = '';
+    const steps = problems[idx].steps || [];
+    steps.forEach((s, i) => {
+      const d = document.createElement('div'); d.textContent = s;
+      d.style.opacity = '0'; d.style.transform = 'translateX(-6px)'; d.style.transition = `all 280ms ease ${i*100}ms`;
+      stepsBox.appendChild(d);
+      requestAnimationFrame(()=>{ d.style.opacity='1'; d.style.transform='none'; });
+    });
+  });
+
+  revealBtn.addEventListener('click', ()=> {
+    const p = problems[idx];
+    revealAnswer.hidden = false;
+    if (p.ans === 'symbolic') revealText.textContent = '1 / (2 * √x)  (symbolic)';
+    else if (p.ans === 'formula') revealText.textContent = 'n * a^(n-1) (formula)';
+    else if (p.ans === null) revealText.textContent = 'Does not exist (one-sided infinities differ)';
+    else revealText.textContent = p.ans.toString();
+  });
+
+  // initialize default problem
+  setProblem(0);
+
+  // set select default and initial render
+  problemSelect.value = '0';
+  draw();
+
+})();
+
+/* Limits Explorer 2 — interactive logic (IIFE, safe to drop) */
+(function() {
+  const problems = [
+    // Trig limits group (1..12)
+    { id:'1', title:"(i) limₓ→0 sin(7x)/x", fExpr:"Math.sin(7*x)/x", hint:"Use sin(kx)≈kx → limit = 7", steps:["For small x: sin(7x)≈7x ⇒ (7x)/x = 7"], ans:7, aDefault:0 },
+    { id:'2', title:"(ii) limₓ→0 sin(x^0)/x", fExpr:null, hint:"sin(x^0) usually equals sin(1) if x^0 interpreted as 1; expression → sin(1)/0 (undefined). If this is sin(x)^0 =1 → 1/x → ∞. Clarify notation.", steps:["This item is ambiguous — usually notation needs correction."], ans:null, aDefault:0 },
+    { id:'3', title:"(iii) lim_{θ→0} (1 - cos θ)/sin θ", fExpr:null, hint:"Use small-angle expansions", steps:["cos θ ≈ 1 - θ^2/2, sin θ ≈ θ ⇒ (1 - cos θ)/sin θ ≈ (θ^2/2)/θ = θ/2 ⇒ 0"], ans:0, aDefault:0 },
+    { id:'4', title:"(iv) lim_{x→π} sin x/(π - x)", fExpr:"Math.sin(x)/(Math.PI - x)", hint:"Let h=π-x; sin x = sin(π - h)=sin h ≈ h ⇒ limit = 1", steps:["Let h=π-x → sin x = sin h ≈ h; denominator = h ⇒ 1"], ans:1, aDefault:Math.PI },
+    { id:'5', title:"(v) lim_{x→0} sin(a x)/sin(b x)", fExpr:"Math.sin( a_val * x )/Math.sin( b_val * x )", hint:"Use small-angle: sin(kx)≈kx ⇒ a/b", steps:["sin(ax)≈ax, sin(bx)≈bx ⇒ ratio a/b"], ans:'a_over_b', aDefault:0 },
+    { id:'6', title:"(vi) lim_{x→0} x / tan x", fExpr:"x/Math.tan(x)", hint:"tan x ≈ x ⇒ limit = 1", steps:["tan x≈x ⇒ x/tan x ≈ 1"], ans:1, aDefault:0 },
+    { id:'7', title:"(vii) lim_{x→0} (1 - cos 2x)/x^2", fExpr:"(1 - Math.cos(2*x))/(x*x)", hint:"Use cos expansion: 1 - cos2x ≈ (2x)^2/2 = 2x^2 ⇒ limit 2", steps:["1-cos2x≈(2x)^2/2=2x^2 ⇒ divide by x^2 gives 2"], ans:2, aDefault:0 },
+    { id:'8', title:"(viii) lim_{x→0} (1 - cos x)/sin^2 x", fExpr:"(1 - Math.cos(x))/(Math.sin(x)*Math.sin(x))", hint:"Use expansions: (1-cos x)≈x^2/2 and sin^2 x≈x^2 ⇒ 1/2", steps:["(1-cos x)≈x^2/2; sin^2 x≈x^2 ⇒ ratio = 1/2"], ans:0.5, aDefault:0 },
+    { id:'9', title:"(ix) lim_{θ→0} sin^2 θ / θ", fExpr:"(Math.sin(x)*Math.sin(x))/x", hint:"sin^2 θ ≈ θ^2 ⇒ θ^2/θ = θ → 0", steps:["sin^2θ≈θ^2 ⇒ θ^2/θ = θ ⇒ 0"], ans:0, aDefault:0 },
+    { id:'10', title:"(x) lim_{x→0} (sec x - cos x)/x", fExpr:"(1/Math.cos(x) - Math.cos(x))/x", hint:"Use expansions; result 0", steps:["sec x ≈1 + x^2/2, cos x ≈1 - x^2/2 ⇒ difference ≈ x^2 ⇒ divide by x → 0"], ans:0, aDefault:0 },
+    { id:'11', title:"(xi) lim_{θ→0} (1 - cos pθ)/(1 - cos qθ)", fExpr:null, hint:"Use small-angle: (1-cos kθ)≈(k^2 θ^2)/2 ⇒ ratio p^2/q^2", steps:["Ratio ≈ (p^2 θ^2/2)/(q^2 θ^2/2)=p^2/q^2"], ans:'p2_over_q2', aDefault:0 },
+    { id:'12', title:"(xii) lim_{θ→0} (tan θ - sin θ)/sin^3 θ", fExpr:"(Math.tan(x) - Math.sin(x))/Math.pow(Math.sin(x),3)", hint:"Use Taylor expansions → 1/2", steps:["tan≈θ+θ^3/3, sin≈θ-θ^3/6 ⇒ difference ≈ θ^3(1/3+1/6)=θ^3/2 ⇒ /θ^3 → 1/2"], ans:0.5, aDefault:0 },
+
+    // e-limits group (13..18)
+    { id:'13', title:"(i) lim_{n→∞} (1 + 1/n)^{2n}", fExpr:null, hint:"(1+1/n)^n→e ⇒ ( )^{2} → e^2", steps:["(1+1/n)^n → e ⇒ power 2n gives e^2"], ans:'e^2', aDefault:1 },
+    { id:'14', title:"(ii) lim_{n→∞} (1 + 1/n)^{n/2}", fExpr:null, hint:"(1+1/n)^n→e, so exponent n/2 ⇒ e^{1/2}", steps:["(1+1/n)^n → e ⇒ ( )^{1/2} = √e"], ans:'e^(1/2)', aDefault:1 },
+    { id:'15', title:"(iii) lim_{n→∞} (1 - 1/n)^n", fExpr:null, hint:"(1 - 1/n)^n → e^{-1}", steps:["Limit equals e^{-1}"], ans:'e^-1', aDefault:1 },
+    { id:'16', title:"(iv) lim_{n→∞} (1 + 1/(3n))^{n}", fExpr:null, hint:"(1 + 1/(3n))^{n} → e^{1/3}", steps:["(1+1/(3n))^{3n}→e ⇒ exponent n gives e^{1/3}"], ans:'e^(1/3)', aDefault:1 },
+    { id:'17', title:"(v) lim_{n→∞} (1 + 4/n)^n", fExpr:null, hint:"→ e^4", steps:["(1+4/n)^n → e^4"], ans:'e^4', aDefault:1 },
+    { id:'18', title:"(vi) lim_{x→0} (1 + 3x)^{2/x}", fExpr:null, hint:"Write exponent 2/x = 6 * (1/(3x)) ⇒ → e^6", steps:["(1+3x)^{2/x} = ((1+3x)^{1/(3x)})^6 → e^6"], ans:'e^6', aDefault:0 }
+  ];
+
+  // DOM
+  const root = document.getElementById('limits-explorer-2');
+  if (!root) return;
+  const canvas = root.querySelector('#le2Canvas');
+  const ctx = canvas.getContext('2d');
+  const problemSelect = root.querySelector('#le2Problem');
+  const slider = root.querySelector('#le2Slider');
+  const aInput = root.querySelector('#le2A');
+  const xVal = root.querySelector('#le2XVal');
+  const yVal = root.querySelector('#le2YVal');
+  const playBtn = root.querySelector('#le2Play');
+  const stepBtn = root.querySelector('#le2Step');
+  const revealBtn = root.querySelector('#le2Reveal');
+  const hintBtn = root.querySelector('#le2Hint');
+  const stepsBox = root.querySelector('#le2StepsBox');
+  const problemTitle = root.querySelector('#le2ProblemTitle');
+  const sideSelect = root.querySelector('#le2Side');
+  const revealAnswer = root.querySelector('#le2RevealAnswer');
+  const revealText = root.querySelector('#le2AnswerText');
+
+  // state
+  let idx = 0;
+  let a = 0;
+  let x = parseFloat(slider.value);
+  let playing = false;
+  let leftX = x - 1.6, rightX = x + 1.6;
+  let raf = null;
+
+  // canvas sizing
+  function resize() {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    draw();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // populate dropdown
+  problems.forEach((p,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = p.title;
+    problemSelect.appendChild(opt);
+  });
+
+  // helpers
+  function safeEvalF(expr, xv, extras={}) {
+    try {
+      if (!expr) return NaN;
+      // allow passing a and p,q,a_val etc via extras
+      const func = new Function('x','a','extras','return (' + expr + ')');
+      return func(xv, a, extras);
+    } catch (e) { return NaN; }
+  }
+
+  function setProblem(i) {
+    idx = i;
+    const p = problems[i];
+    problemTitle.textContent = p.title;
+    // default a
+    a = (typeof p.aDefault !== 'undefined') ? p.aDefault : 0;
+    aInput.value = a;
+    revealAnswer.hidden = true; revealText.textContent = '';
+    stepsBox.hidden = true; stepsBox.innerHTML = '';
+    // for cases needing parameters (v and xi) we set placeholders
+    // slider start
+    slider.value = Math.max(-9, Math.min(9, a - 3));
+    x = parseFloat(slider.value);
+    leftX = x - 1; rightX = x + 1;
+    // special: if problem 5 (a_over_b) or 11 (p2_over_q2) ask user to input parameters via prompt on first load
+    if (p.ans === 'a_over_b') {
+      // get a and b values from user once (non-blocking prompt ok)
+      const aVal = prompt("Enter numeric value for 'a' (for sin(a x)/sin(b x)). Example: 2") || "1";
+      const bVal = prompt("Enter numeric value for 'b' (for sin(a x)/sin(b x)). Example: 3") || "1";
+      p.a_val = Number(aVal); p.b_val = Number(bVal);
+    }
+    if (p.ans === 'p2_over_q2') {
+      const pVal = prompt("Enter numeric value for 'p' (example: 2)") || "1";
+      const qVal = prompt("Enter numeric value for 'q' (example: 3)") || "1";
+      p.p_val = Number(pVal); p.q_val = Number(qVal);
+    }
+    draw();
+  }
+
+  function draw() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = '#fbfdff'; ctx.fillRect(0,0,w,h);
+
+    const span = 6;
+    const xmin = a - span, xmax = a + span;
+    const ymin = -5, ymax = 5;
+    function toPx(mx,my){ const px=(mx - xmin)/(xmax-xmin)*w; const py=(1-(my - ymin)/(ymax - ymin))*h; return {x:px,y:py}; }
+
+    // grid
+    ctx.strokeStyle = 'rgba(15,23,42,0.06)'; ctx.lineWidth = 1;
+    for (let gx=Math.ceil(xmin); gx<=Math.floor(xmax); gx++){ const p = toPx(gx,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,h); ctx.stroke(); }
+
+    // x-axis
+    const y0 = toPx(a,0).y; ctx.strokeStyle='rgba(15,23,42,0.12)'; ctx.lineWidth=1.4; ctx.beginPath(); ctx.moveTo(0,y0); ctx.lineTo(w,y0); ctx.stroke();
+
+    // vertical a line
+    const pa = toPx(a,0); ctx.setLineDash([6,6]); ctx.strokeStyle='rgba(99,102,241,0.18)'; ctx.beginPath(); ctx.moveTo(pa.x,0); ctx.lineTo(pa.x,h); ctx.stroke(); ctx.setLineDash([]);
+
+    // draw function if defined
+    const p = problems[idx];
+    if (p.fExpr) {
+      ctx.strokeStyle = '#2563eb'; ctx.lineWidth=2;
+      ctx.beginPath();
+      const samples = Math.max(120, Math.floor(w/3));
+      for (let i=0;i<=samples;i++){
+        const t=i/samples; const mx = xmin + t*(xmax-xmin);
+        const my = safeEvalF(p.fExpr, mx, p);
+        if (!isFinite(my)) { ctx.moveTo(-100,-100); continue; }
+        const pt = toPx(mx,my);
+        if (i===0) ctx.moveTo(pt.x,pt.y); else ctx.lineTo(pt.x,pt.y);
+      }
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = 'rgba(15,23,42,0.06)'; ctx.font='14px Inter, sans-serif'; ctx.fillText('Symbolic / parameter-based limit — use Reveal Steps.', 14, 20);
+    }
+
+    // nudge approach points toward a & slider mean
+    const mean = parseFloat(slider.value);
+    leftX += (Math.min(a-0.0005, mean) - leftX) * 0.08;
+    rightX += (Math.max(a+0.0005, mean) - rightX) * 0.08;
+
+    const yL = p.fExpr ? safeEvalF(p.fExpr, leftX, p) : NaN;
+    const yR = p.fExpr ? safeEvalF(p.fExpr, rightX, p) : NaN;
+
+    // draw left/right markers
+    if (isFinite(yL)) { const pl=toPx(leftX,yL); drawGlow(pl.x,pl.y,20,'rgba(124,58,237,0.08)'); drawDot(pl.x,pl.y,10,'#7c3aed'); }
+    if (isFinite(yR)) { const pr=toPx(rightX,yR); drawGlow(pr.x,pr.y,16,'rgba(96,165,250,0.07)'); drawDot(pr.x,pr.y,8,'#2563eb'); }
+
+    const visX = (leftX + rightX)/2;
+    const visY = p.fExpr ? safeEvalF(p.fExpr, visX, p) : NaN;
+    root.querySelector('#le2XVal').textContent = visX.toFixed(3);
+    root.querySelector('#le2YVal').textContent = isFinite(visY) ? visY.toFixed(4) : '—';
+
+    function drawDot(cx,cy,r,fill){ ctx.save(); ctx.beginPath(); ctx.fillStyle=fill; ctx.shadowColor=fill; ctx.shadowBlur=12; ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    function drawGlow(cx,cy,rad,color){ ctx.save(); ctx.fillStyle=color; ctx.beginPath(); ctx.ellipse(cx,cy,rad,rad/2,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+  }
+
+  function animate(){
+    if (!playing) { if (raf) cancelAnimationFrame(raf); raf=null; return; }
+    const cur = parseFloat(slider.value);
+    const delta = (a - cur) * 0.02;
+    slider.value = (cur + delta).toFixed(3);
+    x = parseFloat(slider.value);
+    draw();
+    raf = requestAnimationFrame(animate);
+  }
+
+  // events
+  problemSelect.addEventListener('change', ()=> setProblem(parseInt(problemSelect.value)));
+  slider.addEventListener('input', ()=> { leftX = parseFloat(slider.value)-0.6; rightX = parseFloat(slider.value)+0.6; draw(); });
+  aInput.addEventListener('input', ()=> { a = parseFloat(aInput.value); draw(); });
+  sideSelect.addEventListener('change', ()=> draw());
+
+  playBtn.addEventListener('click', ()=> {
+    playing = !playing;
+    playBtn.textContent = playing ? 'Pause' : 'Play';
+    if (playing) animate(); else { if (raf) cancelAnimationFrame(raf); raf=null; }
+  });
+
+  stepBtn.addEventListener('click', ()=> {
+    leftX += (a - leftX) * 0.28; rightX += (a - rightX) * 0.28;
+    slider.value = ((leftX+rightX)/2).toFixed(3); draw();
+  });
+
+  hintBtn.addEventListener('click', ()=> {
+    stepsBox.hidden = false; stepsBox.innerHTML = '';
+    const s = problems[idx].steps || [];
+    s.forEach((t,i)=> {
+      const d = document.createElement('div'); d.textContent = t; d.style.opacity='0'; d.style.transform='translateX(-6px)';
+      d.style.transition = `all 280ms ease ${i*100}ms`; stepsBox.appendChild(d);
+      requestAnimationFrame(()=>{ d.style.opacity='1'; d.style.transform='none'; });
+    });
+  });
+
+  revealBtn.addEventListener('click', ()=> {
+    const p = problems[idx];
+    revealAnswer.hidden = false;
+    if (p.ans === 'a_over_b') {
+      const aV = p.a_val || 1, bV = p.b_val || 1; revealText.textContent = String(aV / bV);
+    } else if (p.ans === 'p2_over_q2') {
+      const P = p.p_val||1, Q = p.q_val||1; revealText.textContent = String((P*P)/(Q*Q));
+    } else if (typeof p.ans === 'number') revealText.textContent = String(p.ans);
+    else revealText.textContent = (p.ans === null) ? 'Does not exist / ambiguous' : String(p.ans);
+  });
+
+  // init
+  setProblem(0);
+  problemSelect.value = '0';
+  draw();
+
+})();
+
+
+/* ===== Limits Explorer 3 — JS (IIFE) =====
+   Paste this at the end of <body> or in a .js file included after the HTML.
+*/
+(function() {
+  const problems = {
+    p1: {
+      title: "f(x)=2x^2 + x - 5",
+      f: x => 2*x*x + x - 5,
+      cDefault: 1,
+      steps: [
+        "Polynomials are continuous; left and right limits equal f(c).",
+        "Compute f(1) = 2·1² + 1 − 5 = −2."
+      ],
+      answer: -2
+    },
+    p2: {
+      title: "f(x)=(x^2 - 9)/(x - 3)",
+      f: x => { if (Math.abs(x - 3) < 1e-9) return NaN; return (x*x - 9)/(x - 3); },
+      cDefault: 3,
+      steps_c3: [
+        "Factor numerator: x^2 - 9 = (x - 3)(x + 3).",
+        "For x ≠ 3 cancel (x - 3) → f(x) = x + 3; limit as x → 3 is 6."
+      ],
+      steps_cneg3: [
+        "If c = -3, denominator ≠ 0. Substitute directly: (9 - 9)/(-6) = 0."
+      ],
+      answer_c3: 6,
+      answer_cneg3: 0
+    },
+    p3: {
+      title: "f(x)=|x - 5|",
+      f: x => Math.abs(x - 5),
+      cDefault: 5,
+      steps: [
+        "Definition: x<5 → |x-5| = 5 - x; x>5 → |x-5| = x - 5.",
+        "Left limit as x→5⁻: 5 - x → 0. Right limit as x→5⁺: x - 5 → 0. So limit = 0."
+      ],
+      answer: 0
+    }
+  };
+
+  // DOM
+  const root = document.getElementById('le3-explorer');
+  if (!root) return;
+  const canvas = root.querySelector('#le3Canvas');
+  const ctx = canvas.getContext('2d');
+  const selProblem = root.querySelector('#le3Problem');
+  const selSide = root.querySelector('#le3Side');
+  const slider = root.querySelector('#le3Slider');
+  const aInput = root.querySelector('#le3A');
+  const titleEl = root.querySelector('#le3ProblemTitle');
+  const xValEl = root.querySelector('#le3XVal');
+  const yValEl = root.querySelector('#le3YVal');
+  const playBtn = root.querySelector('#le3Play');
+  const stepBtn = root.querySelector('#le3Step');
+  const revealBtn = root.querySelector('#le3Reveal');
+  const hintBtn = root.querySelector('#le3Hint');
+  const stepsBox = root.querySelector('#le3StepsBox');
+  const revealBox = root.querySelector('#le3RevealAnswer');
+  const revealText = root.querySelector('#le3AnswerText');
+
+  // state
+  let key = selProblem.value || 'p1';
+  let a = problems[key].cDefault;
+  aInput.value = a;
+  let leftX = parseFloat(slider.value) - 1.2;
+  let rightX = parseFloat(slider.value) + 1.2;
+  let playing = false;
+  let raf = null;
+
+  // canvas sizing (CSS pixel aware)
+  function fit() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    draw();
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  // render dropdown initial titles (already in HTML, but ensure title shown)
+  function setProblem(k) {
+    key = k;
+    const p = problems[k];
+    titleEl.textContent = p.title;
+    a = (p.cDefault !== undefined) ? p.cDefault : 0;
+    aInput.value = a;
+    revealBox.hidden = true;
+    revealText.textContent = '';
+    stepsBox.hidden = true; stepsBox.innerHTML = '';
+    // set slider to a sensible place
+    slider.value = Math.max(-8, Math.min(8, a - 3));
+    leftX = parseFloat(slider.value) - 1.2;
+    rightX = parseFloat(slider.value) + 1.2;
+    draw();
+  }
+
+  function draw() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#fbfdff'; ctx.fillRect(0,0,w,h);
+
+    const span = 6;
+    const xmin = a - span, xmax = a + span;
+    const ymin = -6, ymax = 6;
+    function toPx(mx,my){ const px=(mx-xmin)/(xmax-xmin)*w; const py=(1-(my-ymin)/(ymax-ymin))*h; return {x:px,y:py}; }
+
+    // grid
+    ctx.strokeStyle = 'rgba(15,23,42,0.06)'; ctx.lineWidth = 1;
+    for (let gx=Math.ceil(xmin); gx<=Math.floor(xmax); gx++){
+      const p = toPx(gx,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,h); ctx.stroke();
+    }
+
+    // axis
+    const y0 = toPx(a,0).y; ctx.strokeStyle='rgba(15,23,42,0.12)'; ctx.beginPath(); ctx.moveTo(0,y0); ctx.lineTo(w,y0); ctx.stroke();
+
+    // vertical at a
+    const pa = toPx(a,0); ctx.setLineDash([6,6]); ctx.strokeStyle='rgba(99,102,241,0.18)'; ctx.beginPath(); ctx.moveTo(pa.x,0); ctx.lineTo(pa.x,h); ctx.stroke(); ctx.setLineDash([]);
+
+    // draw function curve if possible
+    const p = problems[key];
+    if (p && p.f) {
+      ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      const samples = Math.max(120, Math.floor(w/3));
+      for (let i=0;i<=samples;i++){
+        const t = i/samples; const mx = xmin + t*(xmax-xmin);
+        let my = p.f(mx);
+        if (!isFinite(my) || Math.abs(my) > 1e4) { ctx.moveTo(-10,-10); continue; }
+        const pt = toPx(mx,my);
+        if (i===0) ctx.moveTo(pt.x,pt.y); else ctx.lineTo(pt.x,pt.y);
+      }
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = 'rgba(15,23,42,0.06)'; ctx.font='13px sans-serif'; ctx.fillText('Use Reveal Steps/Limit for symbolic cases', 12, 18);
+    }
+
+    // approach points — nudge toward slider mean or toward a depending on side
+    const side = selSide.value;
+    const mean = parseFloat(slider.value);
+    leftX += ((side==='right' ? a + 0.001 : Math.min(a - 0.0001, mean)) - leftX) * 0.08;
+    rightX += ((side==='left' ? a - 0.001 : Math.max(a + 0.0001, mean)) - rightX) * 0.08;
+
+    const yL = (p && p.f) ? p.f(leftX) : NaN;
+    const yR = (p && p.f) ? p.f(rightX) : NaN;
+
+    if (isFinite(yL)) { const pl = toPx(leftX,yL); drawGlow(pl.x,pl.y,20,'rgba(124,58,237,0.08)'); drawDot(pl.x,pl.y,10,'#7c3aed'); }
+    if (isFinite(yR)) { const pr = toPx(rightX,yR); drawGlow(pr.x,pr.y,16,'rgba(96,165,250,0.07)'); drawDot(pr.x,pr.y,8,'#2563eb'); }
+
+    const visX = (leftX + rightX)/2;
+    const visY = (p && p.f) ? p.f(visX) : NaN;
+    root.querySelector('#le3XVal').textContent = visX.toFixed(3);
+    root.querySelector('#le3YVal').textContent = isFinite(visY) ? visY.toFixed(4) : '—';
+
+    function drawDot(cx,cy,r,color){ ctx.save(); ctx.beginPath(); ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=12; ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    function drawGlow(cx,cy,rad,color){ ctx.save(); ctx.fillStyle=color; ctx.beginPath(); ctx.ellipse(cx,cy,rad,rad/2,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+  }
+
+  function animate() {
+    if (!playing) { if (raf) cancelAnimationFrame(raf); raf = null; return; }
+    const cur = parseFloat(slider.value);
+    const delta = (a - cur) * 0.02;
+    slider.value = (cur + delta).toFixed(3);
+    draw();
+    raf = requestAnimationFrame(animate);
+  }
+
+  // UI events
+  selProblem.addEventListener('change', ()=> setProblem(selProblem.value));
+  slider.addEventListener('input', ()=> { const val = parseFloat(slider.value); leftX = val - 0.6; rightX = val + 0.6; draw(); });
+  aInput.addEventListener('input', ()=> { a = Number(aInput.value); draw(); });
+  selSide.addEventListener('change', ()=> draw());
+
+  playBtn.addEventListener('click', ()=> {
+    playing = !playing;
+    playBtn.textContent = playing ? 'Pause' : 'Play';
+    if (playing) animate(); else { if (raf) cancelAnimationFrame(raf); raf=null; }
+  });
+
+  stepBtn.addEventListener('click', ()=> {
+    leftX += (a - leftX) * 0.28; rightX += (a - rightX) * 0.28;
+    slider.value = ((leftX + rightX)/2).toFixed(3);
+    draw();
+  });
+
+  hintBtn.addEventListener('click', ()=> {
+    stepsBox.hidden = false; stepsBox.innerHTML = '';
+    const p = problems[key];
+    let list = p.steps || [];
+    if (key === 'p2') {
+      const cVal = Number(aInput.value);
+      if (Math.abs(cVal - 3) < 1e-6) list = p.steps_c3;
+      if (Math.abs(cVal + 3) < 1e-6) list = p.steps_cneg3;
+    }
+    list.forEach((s,i)=> {
+      const d = document.createElement('div'); d.textContent = s; d.style.opacity = '0'; d.style.transform = 'translateX(-6px)'; d.style.transition = `all 260ms ease ${i*90}ms`;
+      stepsBox.appendChild(d);
+      requestAnimationFrame(()=>{ d.style.opacity='1'; d.style.transform='none'; });
+    });
+  });
+
+  revealBtn.addEventListener('click', ()=> {
+    revealBox.hidden = false;
+    const p = problems[key];
+    const cVal = Number(aInput.value);
+    if (key === 'p2') {
+      if (Math.abs(cVal - 3) < 1e-6) revealText.textContent = String(p.answer_c3);
+      else if (Math.abs(cVal + 3) < 1e-6) revealText.textContent = String(p.answer_cneg3);
+      else revealText.textContent = String((cVal*cVal - 9)/(cVal - 3));
+    } else {
+      revealText.textContent = (p.answer !== undefined) ? String(p.answer) : '—';
+    }
+  });
+
+  function setProblem(k) {
+    setTimeout(()=> { // slight delay for UI cohesion
+      key = k; const p = problems[k];
+      titleEl.textContent = p.title;
+      a = (p.cDefault !== undefined) ? p.cDefault : 0;
+      aInput.value = a;
+      stepsBox.hidden = true; stepsBox.innerHTML = '';
+      revealBox.hidden = true; revealText.textContent = '';
+      slider.value = Math.max(-8, Math.min(8, a - 3));
+      leftX = parseFloat(slider.value) - 1.2;
+      rightX = parseFloat(slider.value) + 1.2;
+      draw();
+    }, 30);
+  }
+
+  // initialize
+  setProblem(selProblem.value || 'p1');
+  fit();
+})();
+
+
+
+
+  </script>
+</body>
+</html>

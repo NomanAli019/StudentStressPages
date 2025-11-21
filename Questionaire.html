@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentellect - Mental Wellness Survey</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Base Styles (Simplified & Adapted) ===== */
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary: #f59e0b;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      --success: #10b981;
+      --error: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+    
+    /* Quiz/Survey Styles */
+    .card {
+      background-color: var(--white);
+      border-radius: 16px;
+      padding: 25px;
+      margin: 20px 0;
+      box-shadow: var(--card-shadow);
+    }
+
+    .interactive-survey {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 30px;
+      border-radius: 10px;
+      margin: 30px 0;
+      border: 1px solid #d1d9e6;
+    }
+
+    .survey-question {
+      background: white;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 8px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .survey-question p {
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-left: 10px;
+    }
+    
+    .quiz-option-label {
+        display: block;
+        cursor: pointer;
+        padding: 8px 10px;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+        font-size: 0.95rem;
+    }
+
+    .quiz-option-label:hover {
+        background-color: #f0f4f8;
+    }
+
+    .quiz-option-label input[type="radio"] {
+        margin-right: 10px;
+        accent-color: var(--primary);
+    }
+    
+    .demographics label {
+        display: block;
+        margin-top: 15px;
+        font-weight: 600;
+        color: var(--primary);
+    }
+    .demographics input, .demographics select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+    
+    .demographics {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    
+    /* Header/Footer (Minimal for focus) */
+    header, footer {
+        background-color: var(--primary);
+        color: var(--white);
+        padding: 10px 0;
+        text-align: center;
+    }
+    header {
+        padding: 20px 0;
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    footer p {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+        <h1>Mental Wellness Survey</h1>
+    </div>
+  </header>
+  
+  <section id="comprehensive-quiz" class="section">
+    <div class="section-title">
+      <h2>Depression and Anxiety Scale Survey</h2>
+      <p>Please select the option that best describes you over the **last week**. Your responses will be used to predict a mental wellness level.</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="interactive-survey">
+                <form id="mental-wellness-form">
+                    
+                    <h3><i class="fas fa-user-circle"></i> About You</h3>
+                    <div class="demographics">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" required min="1" max="120">
+                        
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="" disabled selected>Select...</option>
+                            [cite_start]<option value="1">Male</option> [cite: 58]
+                            [cite_start]<option value="2">Female</option> [cite: 59]
+                            [cite_start]<option value="3">Other</option> [cite: 60]
+                            [cite_start]<option value="0">Prefer not to say</option> [cite: 61]
+                        </select>
+                    </div>
+
+                    <h3><i class="fas fa-chart-line"></i> Survey Questions (Last Week)</h3>
+                    <p>Select one option for each question:</p>
+                    <ul>
+                        <li>0  = Did not apply to me at all (Never) </li>
+                       <li>1 = Applied to me to some degree, or some of the time (Sometimes) </li>
+                        <li>2 = Applied to me to a considerable degree, or a good part of time (Often) </li>
+                      <li>3 = Applied to me very much, or most of the time (Almost Always) </li>
+                    </ul>
+                    
+                    <div class="survey-question">
+                        <p><strong>1.</strong> I couldn't seem to experience any positive feeling at all.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q3A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q3A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q3A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q3A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>2.</strong> I found it difficult to work up the initiative to do things.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q5A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q5A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q5A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q5A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>3.</strong> I felt that I had nothing to look forward to.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q10A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q10A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q10A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q10A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>4.</strong> I felt sad and depressed.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q13A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q13A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q13A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q13A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>5.</strong> I felt that I had lost interest in just about everything.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q16A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q16A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q16A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q16A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>6.</strong> I felt I wasn't worth much as a person.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q17A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q17A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q17A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q17A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>7.</strong> I felt that life was meaningless.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q21A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q21A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q21A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q21A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>8.</strong> I couldn't seem to get any enjoyment out of the things I did.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q24A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q24A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q24A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q24A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>9.</strong> I felt down-hearted and blue.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q26A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q26A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q26A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q26A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>10.</strong> I was unable to become enthusiastic about anything.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q31A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q31A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q31A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q31A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>11.</strong> I felt I was pretty worthless.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q34A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q34A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q34A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q34A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>12.</strong> I could see nothing in the future to be hopeful about.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q37A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q37A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q37A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q37A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>13.</strong> I felt that life wasn't worthwhile.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q38A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q38A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q38A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q38A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>14.</strong> I found it difficult to work up the initiative to do things.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q42A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q42A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q42A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q42A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 40px 0; border-color: #ccc;">
+
+                    <div class="survey-question">
+                        <p><strong>15.</strong> I was aware of dryness of my mouth.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q2A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q2A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q2A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q2A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>16.</strong> I experienced breathing difficulty.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q4A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q4A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q4A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q4A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>17.</strong> I had a feeling of shakiness (e.g., legs going to give way).</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q7A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q7A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q7A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q7A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div class="survey-question">
+                        <p><strong>18.</strong> I found myself in situations that made me so anxious I was most relieved when they ended.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q9A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q9A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q9A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q9A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>19.</strong> I had a feeling of faintness.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q15A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q15A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q15A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q15A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>20.</strong> I perspired noticeably (e.g., hands sweaty).</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q19A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q19A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q19A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q19A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>21.</strong> I felt scared without any good reason.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q20A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q20A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q20A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q20A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>22.</strong> I had difficulty in swallowing.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q23A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q23A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q23A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q23A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>23.</strong> I was aware of the action of my heart in the absence of physical exertion.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q25A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q25A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q25A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q25A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>24.</strong> I felt I was close to panic.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q28A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q28A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q28A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q28A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>25.</strong> I feared that I would be "thrown" by some trivial but unfamiliar task.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q30A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q30A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q30A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q30A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>26.</strong> I felt terrified.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q36A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q36A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q36A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q36A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>27.</strong> I was worried about situations in which I might panic and make a fool of myself.</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q40A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q40A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q40A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q40A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <p><strong>28.</strong> I experienced trembling (e.g., in the hands).</p>
+                        <div class="quiz-options">
+                            <label class="quiz-option-label"><input type="radio" name="Q41A" value="0" required> 0 - Never</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q41A" value="1"> 1 - Sometimes</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q41A" value="2"> 2 - Often</label>
+                            <label class="quiz-option-label"><input type="radio" name="Q41A" value="3"> 3 - Almost Always</label>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button type="submit" class="btn btn-primary">Submit Survey</button>
+                    </div>
+
+                </form>
+                
+                <div id="results-area" style="margin-top: 30px; text-align: center; font-size: 1.2rem; font-weight: bold;">
+                    </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 Sentellect. Educational Technology.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mental-wellness-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        [cite_start]// 1. Collect Demographic data [cite: 4, 5]
+        const age = document.getElementById('age').value;
+        const gender = document.getElementById('gender').value;
+
+        [cite_start]// 2. Define the expected order of question names for the model [cite: 132]
+        const questionOrder = [
+            'Q3A', 'Q5A', 'Q10A', 'Q13A', 'Q16A', 'Q17A', 'Q21A', 'Q24A',
+            'Q26A', 'Q31A', 'Q34A', 'Q37A', 'Q38A', 'Q42A', 
+            'Q2A', 'Q4A', 'Q7A', 'Q9A', 'Q15A', 'Q19A', 'Q20A', 'Q23A',
+            'Q25A', 'Q28A', 'Q30A', 'Q36A', 'Q40A', 'Q41A'
+        ];
+        
+        [cite_start]// 3. Collect the 28 answers in the specified order and format as integers [cite: 39, 131]
+        const answers = [];
+        let allAnswered = true;
+        
+        questionOrder.forEach(name => {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            if (selected) {
+                [cite_start]// The value MUST be a number (0, 1, 2, or 3) [cite: 39, 44]
+                answers.push(parseInt(selected.value));
+            } else {
+                allAnswered = false;
+            }
+        });
+
+        if (!allAnswered || !age || !gender) {
+            alert('Please answer all 30 fields (Age, Gender, and all 28 questions) before submitting.');
+            return;
+        }
+
+        [cite_start]// 4. Construct the final JSON object to send to the backend [cite: 94]
+        const payload = {
+            "age": parseInt(age),
+            "gender": parseInt(gender),
+            "answers": answers
+        };
+
+        // For demonstration, log the payload instead of sending it.
+        console.log("--- JSON Payload to send to /predict endpoint ---");
+        console.log(JSON.stringify(payload, null, 2));
+
+        // --- SIMULATION OF BACKEND CALL ---
+        // Replace this with a real fetch() call to your Python Flask endpoint (e.g., /predict)
+        // Example: fetch('/predict', { method: 'POST', ... })
+        const resultsArea = document.getElementById('results-area');
+        resultsArea.innerHTML = `
+            <p style="color: var(--success);">
+                <i class="fas fa-check-circle"></i> Survey Submitted!
+            </p>
+            <p style="font-size: 1rem; color: var(--text-light);">
+                Data has been formatted for the model and is ready to be sent to your Python backend.
+                <br>Check the console for the required JSON payload.
+            </p>
+        `;
+        // --- END SIMULATION ---
+        
+    });
+  </script>
+</body>
+</html>

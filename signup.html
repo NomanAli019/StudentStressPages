@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentellect - Emotion-Aware Learning Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Base Styles ===== */
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-dark: #1e3a8a;
+      --secondary: #f59e0b;
+      --accent: #ec4899;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --text-lighter: #94a3b8;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --gray: #e2e8f0;
+      --gray-light: #f1f5f9;
+      --success: #10b981;
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+
+    .section-title p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+
+    .btn-secondary {
+      background-color: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes bounceIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .animate {
+      animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .animate-slide {
+      animation: slideIn 0.6s ease forwards;
+    }
+    
+    .animate-bounce {
+      animation: bounceIn 0.8s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+
+    /* ===== Header/Navbar ===== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: var(--white);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      padding: 10px 0;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: var(--white);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(30, 64, 175, 0.2);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      position: relative;
+      padding: 5px 0;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .login-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+      color: var(--primary);
+    }
+
+    .signup-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: var(--white);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(30, 64, 175, 0.25);
+    }
+
+    .signup-btn:hover {
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(30, 64, 175, 0.35);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* ===== SIGNUP SECTION ===== */
+    .signup-section {
+      padding: 130px 20px 80px;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .signup-container {
+      width: 100%; max-width: 500px;
+      background: white; border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(30,64,175,0.2);
+      padding: 40px 30px;
+      animation: fadeInUp 1s ease;
+      position: relative;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .signup-container::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 20px 20px 0 0;
+    }
+    .signup-header { text-align: center; margin-bottom: 25px; }
+    .signup-header h2 { font-size: 2rem; margin-bottom: 10px; }
+    .signup-header p { color: var(--text-light); }
+
+    .form-group { margin-bottom: 20px; position: relative; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--text); }
+    .form-group input {
+      width: 100%; padding: 14px 14px 14px 45px;
+      border: 2px solid var(--gray); border-radius: 12px;
+      font-size: 1rem; transition: all 0.3s;
+    }
+    .form-group input:focus {
+      border-color: var(--primary); box-shadow: 0 0 8px rgba(59,130,246,0.4);
+      outline: none;
+    }
+    .input-icon {
+      position: absolute; top: 40px; left: 15px; color: var(--text-light);
+      transition: 0.3s;
+    }
+    .form-group input:focus + .input-icon { color: var(--primary); transform: scale(1.2); }
+
+    .btn-signup {
+      width: 100%; padding: 15px;
+      border: none; border-radius: 12px;
+      font-size: 1.1rem; font-weight: 600; color: white;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      box-shadow: 0 5px 15px rgba(30,64,175,0.3);
+      cursor: pointer; transition: 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .btn-signup:hover { transform: translateY(-3px); }
+    .btn-signup:active { transform: scale(0.98); }
+    .btn-signup::after {
+      content: ''; position: absolute;
+      width: 0; height: 0; border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.4);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+    .btn-signup:active::after { width: 300px; height: 300px; }
+
+    .extra-links { text-align: center; margin-top: 20px; }
+    .extra-links a { color: var(--primary); font-weight: 500; }
+
+    /* Password Strength */
+    #strengthMessage { margin-top: 5px; font-size: 0.9rem; font-weight: 500; }
+    .weak { color: red; }
+    .medium { color: orange; }
+    .strong { color: green; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: linear-gradient(to bottom, var(--primary-dark), #0f172a);
+      color: var(--white);
+      padding: 80px 0 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .footer::before {
+      content: ''; position: absolute; top: 0; left: -200px;
+      width: 200%; height: 8px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary), var(--accent));
+      background-size: 200% 100%;
+      animation: footerLine 6s linear infinite;
+    }
+    @keyframes footerLine {
+      0% { background-position: 0 0; }
+      100% { background-position: 200% 0; }
+    }
+    .footer-content {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 40px; margin-bottom: 50px;
+    }
+    .footer-about { grid-column: span 2; }
+    .footer-logo { font-size: 1.8rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .footer-logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--white), var(--gray));
+      color: var(--primary);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem;
+    }
+    .footer-about p { opacity: 0.8; margin-bottom: 25px; line-height: 1.7; }
+    .social-links { display: flex; gap: 15px; }
+    .social-link {
+      width: 40px; height: 40px; border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .social-link:hover {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      transform: rotate(15deg) scale(1.2);
+    }
+    .footer-links h3 {
+      margin-bottom: 15px; position: relative;
+    }
+    .footer-links h3::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 40px; height: 3px;
+      background: linear-gradient(to right, var(--secondary), var(--accent));
+      border-radius: 2px;
+      animation: expandLine 3s infinite alternate;
+    }
+    @keyframes expandLine {
+      from { width: 20px; }
+      to { width: 60px; }
+    }
+    .footer-links ul { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { color: white; opacity: 0.8; transition: 0.3s; }
+    .footer-links a:hover { opacity: 1; padding-left: 5px; }
+
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .footer-tags { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+    .tag {
+      background-color: rgba(255,255,255,0.1);
+      padding: 5px 15px; border-radius: 50px; font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .tag:hover { background: linear-gradient(to right, var(--secondary), var(--accent)); color: var(--text); transform: scale(1.1); }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Navbar -->
+  <header id="header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="#" class="logo">
+          <div class="logo-icon">S</div>
+          <span class="logo-text">Sentellect</span>
+        </a>
+        
+        <ul class="nav-links">
+          <li><a href="sent.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="Sentellect Platform Features.html">Features</a></li>
+          <li><a href="#">Chapters</a></li>
+          <li><a href="#">Demo</a></li>
+          <li><a href="#">Progress</a></li>
+          <li><a href="#">Resources</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Signup Section -->
+  <section class="signup-section">
+    <div class="signup-container">
+      <div class="signup-header">
+        <h2>Create Account</h2>
+        <p>Join Sentellect and personalize your learning</p>
+      </div>
+      
+      <form>
+        <div class="form-group">
+          <label for="fullname"><i class="fas fa-user"></i> Full Name</label>
+          <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+          <i class="fas fa-user input-icon"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="username"><i class="fas fa-user-circle"></i> Username</label>
+          <input type="text" id="username" name="username" placeholder="Choose a username" required>
+          <i class="fas fa-user-circle input-icon"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+          <i class="fas fa-envelope input-icon"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="password" name="password" placeholder="Create a password" required>
+          <i class="fas fa-lock input-icon"></i>
+          <div id="strengthMessage"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password"><i class="fas fa-lock"></i> Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required>
+          <i class="fas fa-lock input-icon"></i>
+        </div>
+
+        <button type="submit" class="btn-signup">Sign Up</button>
+      </form>
+
+      <div class="extra-links">
+        <p>Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">S</div>
+            SenteIlect
+          </div>
+          <p>Personalizing learning through emotions to improve educational experience for HSSC Mathematics.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Platform</h3>
+          <ul>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Chapters</a></li>
+            <li><a href="#">Demo</a></li>
+            <li><a href="#">Progress</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#">Study Materials</a></li>
+            <li><a href="#">About Project</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Account</h3>
+          <ul>
+            <li><a href="#">Student Login</a></li>
+            <li><a href="#">Create Account</a></li>
+            <li><a href="#">Help Center</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2024 SenteIlect. Final Year Project - Educational Technology.</p>
+        <div class="footer-tags">
+          <a href="#" class="tag">PTB HSSC Mathematics</a>
+          <a href="#" class="tag">Emotion-Aware Learning</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+      const header = document.getElementById('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+

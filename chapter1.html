@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chapter 1 Functions & Limits</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9fafb;
+      color: #333;
+    }
+    h1, h2 {
+      color: #0056b3;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    button {
+      background: #0056b3;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+    button:hover {
+      background: #00408f;
+    }
+    canvas {
+      max-width: 100%;
+      height: 350px;
+    }
+    a.game-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: #28a745;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a.game-link:hover {
+      background: #218838;
+    }
+    .jingle-box {
+      background: #fff3cd;
+      border: 2px solid #f1c40f;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chapter 1: Function & Limits</h1>
+
+  <!-- Game Link -->
+  <div class="card">
+    <h2>🎮 Play the Function Machine</h2>
+    <p>Click the button below to try the interactive function machine game:</p>
+    <a href="https://www.mathplayground.com/functionmachine.html" target="_blank" class="game-link">
+      🔗 Play Function Machine
+    </a>
+  </div>
+
+  <!-- Step by Step Exercise -->
+  <div class="card">
+    <h2>📘 Step-by-Step Solving: f(x) = x² - x</h2>
+    <p>Plug in \( x = -2 \)</p>
+    <button onclick="showStep(1)">Step 1</button>
+    <button onclick="showStep(2)">Step 2</button>
+    <button onclick="showStep(3)">Step 3</button>
+    <button onclick="showStep(4)">Final Answer</button>
+    <p id="solution"></p>
+  </div>
+
+  <!-- First Principle Question -->
+  <div class="card">
+    <h2>✍️ First Principle Exercise</h2>
+    <p>Find and simplify \( \dfrac{f(a+h) - f(a)}{h} \) where:</p>
+    <ul>
+      <li>(i) \( f(x) = 6x - 9 \)</li>
+      <li>(ii) \( f(x) = \sin x \)</li>
+      <li>(iii) \( f(x) = x^3 + 2x^2 - 1 \)</li>
+      <li>(iv) \( f(x) = \cos x \)</li>
+    </ul>
+    <p>Select a function and values of <code>a</code> and <code>h</code> to see human-friendly steps:</p>
+
+    <label for="fn">Choose Function</label>
+    <select id="fn">
+      <option value="linear">(i) f(x) = 6x - 9</option>
+      <option value="sin">(ii) f(x) = sin x</option>
+      <option value="poly">(iii) f(x) = x³ + 2x² - 1</option>
+      <option value="cos">(iv) f(x) = cos x</option>
+    </select>
+
+    <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div>
+        <label for="a">Value of a</label>
+        <input id="a" type="number" step="any" value="2">
+      </div>
+      <div>
+        <label for="h">Value of h</label>
+        <input id="h" type="number" step="any" value="0.1">
+      </div>
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+      <button id="run">Show Steps</button>
+      <button id="limit">Show Limit as h → 0</button>
+    </div>
+
+    <div class="steps" id="steps"></div>
+    <pre id="numeric">—</pre>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="card">
+    <h2>📘 Question 3: Express as Functions</h2>
+    <p>(a) The perimeter P of a square as a function of its area A.</p>
+    <button onclick="showQ3('square',1)">Step 1</button>
+    <button onclick="showQ3('square',2)">Step 2</button>
+    <button onclick="showQ3('square',3)">Final Answer</button>
+    <p id="q3square"></p>
+
+    <p>(b) The area A of a circle as a function of its circumference C.</p>
+    <button onclick="showQ3('circle',1)">Step 1</button>
+    <button onclick="showQ3('circle',2)">Step 2</button>
+    <button onclick="showQ3('circle',3)">Final Answer</button>
+    <p id="q3circle"></p>
+
+    <p>(c) The volume V of a cube as a function of the area A of its base.</p>
+    <button onclick="showQ3('cube',1)">Step 1</button>
+    <button onclick="showQ3('cube',2)">Step 2</button>
+    <button onclick="showQ3('cube',3)">Final Answer</button>
+    <p id="q3cube"></p>
+  </div>
+
+  <!-- Function Types Visualization -->
+  <div class="card">
+    <h2>🔎 Types of Functions (Interactive Graphs)</h2>
+    <p>Select function type to see its graph:</p>
+    <select id="functionSelect" onchange="plotFunction()">
+      <option value="x+3">One-to-One (f(x) = x + 3)</option>
+      <option value="x*x">Many-to-One (f(x) = x²)</option>
+      <option value="identity">Identity (f(x) = x)</option>
+      <option value="constant">Constant (f(x) = 7)</option>
+    </select>
+    <canvas id="functionChart"></canvas>
+  </div>
+
+  <!-- 🎵 Domain & Range Jingle -->
+  <div class="card jingle-box">
+    <h2>🎶 Domain & Range Jingle</h2>
+    <p id="jingleText">
+      Domain is where x can go,<br>
+      Range is y, the high and low.<br>
+      Check the roots and check the line,<br>
+      Make sure values are all fine.<br>
+      Domain is where x can go,<br>
+      Range is y, the high and low.
+    </p>
+
+    <button onclick="showJingleStep(1)">Step 1</button>
+    <button onclick="showJingleStep(2)">Step 2</button>
+    <button onclick="showJingleStep(3)">Step 3</button>
+    <button onclick="showJingleStep(4)">Final Meaning</button>
+    <p id="jingleSteps"></p>
+
+    <button onclick="speakJingle()">🔊 Listen to Jingle</button>
+  </div>
+ 
+    <!-- Domain & Range Question -->
+  <div class="card">
+    <h2>📘 Question 4: Domain and Range</h2>
+    <p>Find the domain and the range of the function g defined below:</p>
+    <ol>
+      <li>\( g(x) = 2x - 5 \)</li>
+      <li>\( g(x) = \sqrt{x^2 - 4} \)</li>
+      <li>\( g(x) = \sqrt{x+1} \)</li>
+      <li>\( g(x) = |x - 3| \)</li>
+      <li>
+        \[
+        g(x) =
+        \begin{cases} 
+        6x+7, & x \le -2 \\
+        4-3x, & -2 < x
+        \end{cases}
+        \]
+      </li>
+      <li>
+        \[
+        g(x) =
+        \begin{cases} 
+        x-1, & x < 3 \\
+        2x+1, & x \ge 3
+        \end{cases}
+        \]
+      </li>
+      <li>\( g(x) = \dfrac{x^2 - 3x + 2}{x+1}, \; x \ne -1 \)</li>
+      <li>\( g(x) = \dfrac{x^2 - 16}{x-4}, \; x \ne 4 \)</li>
+    </ol>
+
+    <p>Click each button to reveal the solution:</p>
+    <button onclick="showDR(1)">Solution (i)</button>
+    <button onclick="showDR(2)">Solution (ii)</button>
+    <button onclick="showDR(3)">Solution (iii)</button>
+    <button onclick="showDR(4)">Solution (iv)</button>
+    <button onclick="showDR(5)">Solution (v)</button>
+    <button onclick="showDR(6)">Solution (vi)</button>
+    <button onclick="showDR(7)">Solution (vii)</button>
+    <button onclick="showDR(8)">Solution (viii)</button>
+
+    <p id="drSolution"></p>
+  </div>
+
+ <div class="card">
+  <h2>🧠 Gentle Question: Let's Find a Relationship Between a and b</h2>
+  <p>
+    Don’t worry — this one looks tricky, but we’ll take it slow. 💛<br><br>
+    We’re given this function:
+    <br><br>
+    <code>f(x) = x² - ax + bx + 1</code>
+    <br><br>
+    And we know:
+    <ul>
+      <li>f(2) = 1</li>
+      <li>f(1) = 0</li>
+    </ul>
+    Let’s figure out what this tells us about <code>a</code> and <code>b</code>. Just click one step at a time. You’ve got this. 😊
+  </p>
+
+  <button onclick="showABStep(1)">🌱 Step 1: Clean it up</button>
+  <button onclick="showABStep(2)">🔍 Step 2: Plug in x = 2</button>
+  <button onclick="showABStep(3)">🔎 Step 3: Plug in x = 1</button>
+  <button onclick="showABStep(4)">🎉 Final Answer</button>
+
+  <p id="abSolution" style="font-size: 1.05em;"></p>
+</div>
+
+<div class="card">
+  <h2>🪨 Falling Stone Game</h2>
+  <p>
+    The stone's height after <code>x</code> seconds is given by:<br>
+    <b>h(x) = 40 - 10x²</b>
+  </p>
+
+  <!-- Controls -->
+  <label for="timeInput">⏲️ Enter time (x in seconds):</label>
+  <input id="timeInput" type="number" step="0.1" value="1">
+  <button onclick="checkHeight()">Check Height</button>
+  <button onclick="startStoneAnimation()">▶ Start Animation</button>
+
+  <p id="heightResult">👉 Try x = 1, 1.5, 1.7 ...</p>
+
+  <!-- Animation Area -->
+  <div id="fallArea">
+    <div id="stone">🪨</div>
+    <div id="ground"></div>
+  </div>
+
+  <!-- Step-by-step -->
+  <h3>📘 Step-by-Step Solution</h3>
+  <button onclick="showStep(1)">Case (a) x = 1 sec</button>
+  <button onclick="showStep(2)">Case (b) x = 1.5 sec</button>
+  <button onclick="showStep(3)">Case (c) x = 1.7 sec</button>
+  <button onclick="showStep(4)">When does it hit the ground?</button>
+  <p id="solutionSteps"></p>
+</div>
+
+<style>
+  #fallArea {
+    position: relative;
+    width: 120px;
+    height: 300px;
+    margin: 20px auto;
+    border: 2px solid #333;
+    background: linear-gradient(white, lightblue);
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  #stone {
+    position: absolute;
+    top: 0;
+    left: 40px;
+    font-size: 50px;
+    transition: top 0.2s;
+  }
+  #ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: green;
+  }
+</style>
+
+<div class="card">
+  <h2>✨ Parametric → Conic Equations (Super Simple Steps)</h2>
+  <p>
+    Imagine parametric equations as “secret codes” 🤫.  
+    Our job: remove the secret (t or θ) and show the real face (the usual x–y equation).
+  </p>
+
+  <!-- Parabola -->
+  <div style="margin-top:12px; border-top:1px dashed #ddd; padding-top:12px;">
+    <h3>(i) Parabola: <code>x = a t², &nbsp; y = 2 a t</code></h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button onclick="showParabola(1)">Step 1</button>
+      <button onclick="showParabola(2)">Step 2</button>
+      <button onclick="showParabola(3)">Step 3</button>
+      <button onclick="showParabola(4)">Final</button>
+    </div>
+    <div id="parabSteps" style="margin-top:10px; line-height:1.6;">
+      👉 Start with Step 1.
+    </div>
+  </div>
+
+  <!-- Ellipse -->
+  <div style="margin-top:16px; border-top:1px dashed #ddd; padding-top:12px;">
+    <h3>(ii) Ellipse: <code>x = a cosθ, &nbsp; y = b sinθ</code></h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button onclick="showEllipse(1)">Step 1</button>
+      <button onclick="showEllipse(2)">Step 2</button>
+      <button onclick="showEllipse(3)">Final</button>
+    </div>
+    <div id="ellipseSteps" style="margin-top:10px; line-height:1.6;">
+      👉 Start with Step 1.
+    </div>
+  </div>
+
+  <!-- Hyperbola -->
+  <div style="margin-top:16px; border-top:1px dashed #ddd; padding-top:12px;">
+    <h3>(iii) Hyperbola: <code>x = a secθ, &nbsp; y = b tanθ</code></h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button onclick="showHyperbola(1)">Step 1</button>
+      <button onclick="showHyperbola(2)">Step 2</button>
+      <button onclick="showHyperbola(3)">Final</button>
+    </div>
+    <div id="hyperSteps" style="margin-top:10px; line-height:1.6;">
+      👉 Start with Step 1.
+    </div>
+  </div>
+</div>
+<!-- Question 8: Hyperbolic Identities -->
+<div id="q8" style="margin-top:40px; padding:20px; border:2px solid #6a5acd; border-radius:10px; background:#f9f7ff;">
+  <h2 style="color:#6a5acd;">Question 8: Prove Hyperbolic Identities</h2>
+  <p style="font-size:16px; color:#444;">Let’s learn 3 hyperbolic identities in a very easy, fun way — like sandwiches, closets, and laundry baskets 😄</p>
+
+  <!-- Cards Section -->
+  <div id="cardsQ8" style="margin-top:20px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+    
+    <!-- Card 1 -->
+    <div style="border:2px solid #4CAF50; border-radius:12px; padding:15px; width:260px; text-align:left; background:#f9fff9; box-shadow:0 4px 8px rgba(0,0,0,0.1); line-height:1.5;">
+      <h3 style="color:#4CAF50; font-size:18px;">Identity 1 🥪</h3>
+      <p style="font-size:14px; color:#333;">
+        We want <b>sinh(2x)</b>.  
+        <br>Step 1: Use the rule → sinh(A+B) = sinh(A)cosh(B) + cosh(A)sinh(B).  
+        <br>Step 2: Put A = x and B = x → sinh(x+x).  
+        <br>Step 3: That becomes sinh(x)cosh(x) + cosh(x)sinh(x).  
+        <br>Step 4: Both are same, like half sandwich + half sandwich = full sandwich 🥪.  
+        <br><b>Answer: sinh(2x) = 2 sinh(x) cosh(x).</b>
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div style="border:2px solid #2196F3; border-radius:12px; padding:15px; width:260px; text-align:left; background:#f0f8ff; box-shadow:0 4px 8px rgba(0,0,0,0.1); line-height:1.5;">
+      <h3 style="color:#2196F3; font-size:18px;">Identity 2 👚</h3>
+      <p style="font-size:14px; color:#333;">
+        We want <b>sech²x</b>.  
+        <br>Step 1: Start with golden rule → cosh²x - sinh²x = 1.  
+        <br>Step 2: Divide everything by cosh²x (like putting clothes neatly on a shelf 👚).  
+        <br>Step 3: Now we have 1 - (sinh²/cosh²) = 1/cosh².  
+        <br>Step 4: sinh/cosh = tanh, so (sinh²/cosh²) = tanh².  
+        <br>Step 5: 1/cosh² = sech².  
+        <br><b>Answer: sech²x = 1 - tanh²x.</b>
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div style="border:2px solid #FF9800; border-radius:12px; padding:15px; width:260px; text-align:left; background:#fff8e1; box-shadow:0 4px 8px rgba(0,0,0,0.1); line-height:1.5;">
+      <h3 style="color:#FF9800; font-size:18px;">Identity 3 🧺</h3>
+      <p style="font-size:14px; color:#333;">
+        We want <b>csch²x</b>.  
+        <br>Step 1: Again start with golden rule → cosh²x - sinh²x = 1.  
+        <br>Step 2: This time divide everything by sinh²x (like putting clothes in a laundry basket 🧺).  
+        <br>Step 3: That gives (cosh²/sinh²) - 1 = 1/sinh².  
+        <br>Step 4: cosh/sinh = coth → so cosh²/sinh² = coth².  
+        <br>Step 5: 1/sinh² = csch².  
+        <br><b>Answer: csch²x = coth²x - 1.</b>
+      </p>
+    </div>
+
+  </div>
+<div id="qX" style="margin-top:40px; padding:20px; border:2px solid #6a5acd; border-radius:10px; background:#f9f7ff;">
+  <h2 style="color:#6a5acd;">Question X: Even, Odd, or Neither Functions</h2>
+  <p style="font-size:16px; color:#444;">Let’s learn how to check if a function is <b>Even</b>, <b>Odd</b>, or <b>Neither</b>.</p>
+
+  <ul style="color:#333; font-size:16px;">
+    <li><b>Even:</b> f(-x) = f(x) → symmetric about the y-axis</li>
+    <li><b>Odd:</b> f(-x) = -f(x) → symmetric about the origin</li>
+    <li><b>Neither:</b> if it satisfies neither rule</li>
+  </ul>
+
+  <button onclick="animateEven()" style="padding:10px 15px; margin:5px; background:#6a5acd; color:white; border:none; border-radius:5px; cursor:pointer;">Even Animation</button>
+  <button onclick="animateOdd()" style="padding:10px 15px; margin:5px; background:#20b2aa; color:white; border:none; border-radius:5px; cursor:pointer;">Odd Animation</button>
+  <button onclick="animateNeither()" style="padding:10px 15px; margin:5px; background:#ff6347; color:white; border:none; border-radius:5px; cursor:pointer;">Neither Animation</button>
+
+  <div id="functionBox" style="margin-top:20px; padding:20px; border:2px dashed #888; width:220px; text-align:center; font-weight:bold; font-size:18px;">
+    f(x) = ?
+  </div>
+
+  <h3 style="margin-top:20px; color:#6a5acd;">Quick Quiz:</h3>
+  <p>1. f(x) = x² → <button onclick="revealEven()" style="margin-left:5px;">Reveal Answer</button></p>
+  <div id="ans1" style="margin-left:20px; font-size:15px; color:#333;"></div>
+
+  <p>2. f(x) = x³ → <button onclick="revealOdd()" style="margin-left:5px;">Reveal Answer</button></p>
+  <div id="ans2" style="margin-left:20px; font-size:15px; color:#333;"></div>
+
+  <p>3. f(x) = x² + x → <button onclick="revealNeither()" style="margin-left:5px;">Reveal Answer</button></p>
+  <div id="ans3" style="margin-left:20px; font-size:15px; color:#333;"></div>
+</div>
+
+<!-- 🌟 End of Chapter Celebration -->
+<div class="chapter-end">
+  <h2>🎉 Chapter 1 – Exercise 1.1 Completed! ✅</h2>
+  <p class="highlight">Amazing job — you made it through Even, Odd & Neither Functions 🎭 + the Domain & Range Jingle 🎵</p>
+  
+  <div class="motivation-box">
+    <h3>💌 A Note for You</h3>
+    <p>
+      If you’re feeling <b>stressed or overwhelmed</b>, remember this:  
+      <br><br>
+      <em>“You don’t have to be perfect, you just have to keep going.”</em> 🌈  
+      <br><br>
+      Take a deep breath, smile 😊, and know that you’re doing better than you think.  
+      <br>
+      Small steps every day lead to big achievements. Keep shining ✨ — you’ve got this! 💪
+    </p>
+  </div>
+</div>
+
+<!-- 🎊 Celebration Styles -->
+<style>
+  .chapter-end {
+    margin-top: 60px;
+    padding: 30px;
+    border: 3px dashed #32cd32;
+    border-radius: 20px;
+    background: #f0fff0;
+    text-align: center;
+    animation: glow 2s infinite alternate;
+  }
+  .chapter-end h2 {
+    color: #2e8b57;
+    font-size: 26px;
+    animation: bounce 2s infinite;
+  }
+  .chapter-end .highlight {
+    color: #6a5acd;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  .motivation-box {
+    background: #f0faff;
+    border: 2px solid #87ceeb;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    animation: fadeIn 3s ease-in-out;
+  }
+  .motivation-box h3 {
+    color: #007acc;
+  }
+
+  /* ✨ Animations */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes glow {
+    from { box-shadow: 0 0 10px #32cd32; }
+    to { box-shadow: 0 0 20px #6a5acd; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+
+
+  <!-- SCRIPT SECTION -->
+  <script>
+    // Step by Step Exercise f(x)=x²-x
+    function showStep(step) {
+      const steps = {
+        1: "f(-2) = (-2)² - (-2)",
+        2: "f(-2) = 4 - (-2)",
+        3: "f(-2) = 4 + 2",
+        4: "✅ Final Answer: f(-2) = 6"
+      };
+      document.getElementById("solution").innerHTML = steps[step];
+      MathJax.typeset();
+    }
+
+    // First Principle Exercise
+    const fnEl = document.getElementById('fn');
+    const aEl = document.getElementById('a');
+    const hEl = document.getElementById('h');
+    const stepsEl = document.getElementById('steps');
+    const runBtn = document.getElementById('run');
+    const limitBtn = document.getElementById('limit');
+
+    function showSteps(showLimit=false){
+      const fn = fnEl.value;
+      const a = parseFloat(aEl.value);
+      const h = parseFloat(hEl.value);
+      let html = '';
+
+      if (fn === 'linear'){
+        html += `<p>Start with f(x) = 6x - 9. Replace x with (a+h): f(a+h) = 6a + 6h - 9.</p>`;
+        html += `<p>Subtract f(a) = 6a - 9 → difference = 6h.</p>`;
+        html += `<p>Divide by h → (6h)/h = <b>6</b>.</p>`;
+        if (showLimit) html += `<p>As h → 0, nothing changes. Final answer = <b>6</b>.</p>`;
+      }
+
+      if (fn === 'sin'){
+        html += `<p>Start with f(x) = sin(x). So f(a+h) - f(a) = sin(a+h) - sin(a).</p>`;
+        html += `<p>Use identity sinC - sinD = 2cos((C+D)/2)·sin((C-D)/2).</p>`;
+        html += `<p>So it becomes 2cos(a + h/2)·sin(h/2).</p>`;
+        html += `<p>Divide by h → [2cos(a + h/2)·sin(h/2)]/h.</p>`;
+        if (showLimit) html += `<p>As h → 0, sin(h/2)/(h/2) → 1. Final derivative = <b>cos(a)</b>.</p>`;
+      }
+
+      if (fn === 'poly'){
+        html += `<p>Start with f(x) = x³ + 2x² - 1.</p>`;
+        html += `<p>Expand f(a+h) = (a+h)³ + 2(a+h)² - 1.</p>`;
+        html += `<p>(a+h)³ = a³ + 3a²h + 3ah² + h³.</p>`;
+        html += `<p>2(a+h)² = 2a² + 4ah + 2h².</p>`;
+        html += `<p>So f(a+h) = a³ + 3a²h + 3ah² + h³ + 2a² + 4ah + 2h² - 1.</p>`;
+        html += `<p>Subtract f(a) = a³ + 2a² - 1 → left with 3a²h + 3ah² + h³ + 4ah + 2h².</p>`;
+        html += `<p>Factor h → h(3a² + 3ah + h² + 4a + 2h).</p>`;
+        html += `<p>Divide by h → <b>3a² + 3ah + h² + 4a + 2h</b>.</p>`;
+        if (showLimit) html += `<p>As h → 0 → <b>3a² + 4a</b>.</p>`;
+      }
+
+      if (fn === 'cos'){
+        html += `<p>Start with f(x) = cos(x). So f(a+h) - f(a) = cos(a+h) - cos(a).</p>`;
+        html += `<p>Use identity cosC - cosD = -2sin((C+D)/2)·sin((C-D)/2).</p>`;
+        html += `<p>So it becomes -2sin(a + h/2)·sin(h/2).</p>`;
+        html += `<p>Divide by h → [-2sin(a + h/2)·sin(h/2)]/h.</p>`;
+        if (showLimit) html += `<p>As h → 0, sin(h/2)/(h/2) → 1. Final derivative = <b>-sin(a)</b>.</p>`;
+      }
+
+      stepsEl.innerHTML = html;
+    }
+
+    runBtn.addEventListener('click', ()=> showSteps(false));
+    limitBtn.addEventListener('click', ()=> showSteps(true));
+
+    // Question 3 Functions
+    function showQ3(shape, step) {
+      if (shape === 'square') {
+        const steps = {
+          1: "👉 A square’s area is side × side. If area = A, side = √A.",
+          2: "👉 Perimeter = 4 × side = 4√A.",
+          3: "✅ Final Answer: P(A) = 4√A."
+        };
+        document.getElementById("q3square").innerHTML = steps[step];
+      }
+
+      if (shape === 'circle') {
+        const steps = {
+          1: "👉 Circumference C = 2πr, so r = C ÷ (2π).",
+          2: "👉 Area = πr² = π(C ÷ 2π)².",
+          3: "✅ Final Answer: A(C) = C² ÷ (4π)."
+        };
+        document.getElementById("q3circle").innerHTML = steps[step];
+      }
+
+      if (shape === 'cube') {
+        const steps = {
+          1: "👉 Base area A = side² → side = √A.",
+          2: "👉 Volume = side³ = (√A)³.",
+          3: "✅ Final Answer: V(A) = A^(3/2)."
+        };
+        document.getElementById("q3cube").innerHTML = steps[step];
+      }
+
+      MathJax.typeset();
+    }
+
+    // Function Graphs
+    let ctxFunc = document.getElementById("functionChart").getContext("2d");
+    let funcChart;
+
+    function generateData(expr) {
+      let data = [];
+      for (let x = -5; x <= 5; x += 0.5) {
+        let y;
+        if (expr === "x+3") y = x + 3;
+        else if (expr === "x*x") y = x * x;
+        else if (expr === "identity") y = x;
+        else if (expr === "constant") y = 7;
+        data.push({x, y});
+      }
+      return data;
+    }
+
+    function plotFunction() {
+      const expr = document.getElementById("functionSelect").value;
+      if (funcChart) funcChart.destroy();
+      funcChart = new Chart(ctxFunc, {
+        type: "scatter",
+        data: {
+          datasets: [{
+            label: "f(x)",
+            data: generateData(expr),
+            borderColor: "blue",
+            showLine: true,
+            fill: false,
+          }]
+        },
+        options: {
+          scales: {
+            x: {title: {display: true, text: "x"}},
+            y: {title: {display: true, text: "f(x)"}}
+          }
+        }
+      });
+    }
+    plotFunction(); // initial plot
+
+    // 🎵 Jingle Steps
+    function showJingleStep(step) {
+      const steps = {
+        1: "👉 Domain means: all x-values you can put into the function.",
+        2: "👉 Range means: all y-values the function gives back.",
+        3: "👉 Always check: do square roots, fractions, or trig functions block some values?",
+        4: "✅ Final Meaning: Domain is allowed x’s, Range is possible y’s."
+      };
+      document.getElementById("jingleSteps").innerHTML = steps[step];
+    }
+
+    // 🔊 Speak Jingle
+    function speakJingle() {
+      let text = "Domain is where x can go. Range is y, the high and low. Check the roots and check the line. Make sure values are all fine. Domain is where x can go. Range is y, the high and low.";
+      let utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      speechSynthesis.speak(utterance);
+    }
+
+ // Domain & Range Solutions with Simple Explanations
+function showDR(num) {
+  const solutions = {
+    1: "👉 Domain = all numbers.<br>Reason: Linear functions accept any x.<br>👉 Range = all numbers.<br>Reason: You can make 2x-5 equal any y.",
+    
+    2: "👉 Domain = x ≤ -2 or x ≥ 2.<br>Reason: Inside √ must be ≥ 0.<br>👉 Range = y ≥ 0.<br>Reason: √ never gives negative numbers.",
+    
+    3: "👉 Domain = x ≥ -1.<br>Reason: Inside √ must be ≥ 0.<br>👉 Range = y ≥ 0.<br>Reason: √ always gives positive numbers or 0.",
+    
+    4: "👉 Domain = all numbers.<br>Reason: |x-3| works for any x.<br>👉 Range = y ≥ 0.<br>Reason: Absolute value is never negative.",
+    
+    5: "👉 Domain = all numbers.<br>Reason: Both rules cover all x.<br>👉 Range = y < 10.<br>Reason: Left side gives (−∞,−5], right side gives (−∞,10). So together → (−∞,10).",
+    
+    6: "👉 Domain = all numbers.<br>Reason: Both rules cover all x.<br>👉 Range = y < 2 or y ≥ 7.<br>Reason: Left side goes up to (but not 2), right side starts from 7 upwards. Gap between 2 and 7 not covered.",
+    
+    7: "👉 Domain = all numbers except −1.<br>Reason: Denominator cannot be 0.<br>👉 Range = y ≤ −9.9 or y ≥ −0.1.<br>Reason: Middle values between −9.9 and −0.1 are skipped by the fraction.",
+    
+    8: "👉 Domain = all numbers except 4.<br>Reason: Denominator cannot be 0.<br>👉 Range = all numbers except 8.<br>Reason: Simplifies to y=x+4, but at x=4 (not allowed) → y=8 is missing."
+  };
+
+  document.getElementById("drSolution").innerHTML = solutions[num];
+  MathJax.typeset();
+}
+
+  function showABStep(step) {
+    const abSteps = {
+      1: `
+        ✨ Let’s simplify the function first:<br>
+        \( f(x) = x^2 - ax + bx + 1 \)<br>
+        👉 Group the like terms:<br>
+        <code>f(x) = x² + (b - a)x + 1</code><br>
+        ✅ Now it’s easier to work with!
+      `,
+      2: `
+        📌 We know that f(2) = 1. So plug in x = 2:<br>
+        \( f(2) = 4 + 2(b - a) + 1 = 1 \)<br>
+        👉 That simplifies to:<br>
+        \( 5 + 2(b - a) = 1 \)<br>
+        Subtract 5: \( 2(b - a) = -4 \)<br>
+        ✅ Divide by 2: <b>b - a = -2</b>
+      `,
+      3: `
+        📌 Now use f(1) = 0. Plug in x = 1:<br>
+        \( f(1) = 1 + (b - a) + 1 = 0 \)<br>
+        👉 That simplifies to:<br>
+        \( 2 + (b - a) = 0 \)<br>
+        ✅ Subtract 2: <b>b - a = -2</b>
+      `,
+      4: `
+        🎉 We got the same answer from both values!<br>
+        ✅ So the final relationship is:<br><br>
+        <span style="font-size: 1.3em; font-weight: bold;">b - a = -2</span><br><br>
+        That means: <b>b is 2 less than a</b>.<br><br>
+        🌟 Great job sticking through it — proud of you!
+      `
+    };
+
+    document.getElementById("abSolution").innerHTML = abSteps[step];
+    MathJax.typeset();
+  }
+
+function checkHeight() {
+    const x = parseFloat(document.getElementById("timeInput").value);
+    let h = 40 - 10 * x * x;
+    let result = "";
+
+    if (h > 0) {
+      result = `⏱️ At ${x} sec → Height = ${h.toFixed(2)} m 📍`;
+    } else {
+      result = "💥 Stone hit the ground at 2 sec!";
+      h = 0;
+    }
+
+    document.getElementById("heightResult").innerHTML = result;
+
+    // Move stone visually
+    let fallAreaHeight = 250; // pixels for 40m
+    let topPx = fallAreaHeight - (h / 40) * fallAreaHeight;
+    document.getElementById("stone").style.top = topPx + "px";
+  }
+
+  // Animate falling stone automatically
+  function startStoneAnimation() {
+    let x = 0;
+    let stone = document.getElementById("stone");
+    let info = document.getElementById("heightResult");
+
+    clearInterval(window.fallInterval); // reset any old animation
+
+    window.fallInterval = setInterval(() => {
+      x += 0.1;
+      let h = 40 - 10 * x * x;
+
+      if (h <= 0) {
+        h = 0;
+        info.innerHTML = `💥 The stone hit the ground at x = ${x.toFixed(1)} sec!`;
+        clearInterval(window.fallInterval);
+      } else {
+        info.innerHTML = `⏱️ At ${x.toFixed(1)} sec → Height = ${h.toFixed(1)} m`;
+      }
+
+      // Convert height to pixels
+      let fallAreaHeight = 250;
+      let topPx = fallAreaHeight - (h / 40) * fallAreaHeight;
+      stone.style.top = topPx + "px";
+    }, 200);
+  }
+
+  // Step-by-step explanation
+  function showStep(step) {
+    const steps = {
+      1: "✅ For x = 1 sec: h(1) = 40 - 10(1²) = 30 m",
+      2: "✅ For x = 1.5 sec: h(1.5) = 40 - 10(2.25) = 17.5 m",
+      3: "✅ For x = 1.7 sec: h(1.7) = 40 - 10(2.89) ≈ 11.1 m",
+      4: "💥 Solve 40 - 10x² = 0 → x² = 4 → x = 2 sec. The stone hits the ground at 2 seconds."
+    };
+    document.getElementById("solutionSteps").innerHTML = steps[step];
+  }
+  function showParabola(step) {
+    const text = {
+      1: `<b>Step 1:</b> We have x = a t² and y = 2 a t.<br>
+          Think of t as the “mask” 😷. We want to remove it and see only x and y.`,
+
+      2: `<b>Step 2:</b> y = 2 a t → if you divide by 2a, you get t = y / (2a).<br>
+          (Like peeling a banana 🍌 to see t inside.)`,
+
+      3: `<b>Step 3:</b> Now replace t in x = a t².<br>
+          So x = a (y / (2a))².<br>
+          (We swapped the mask for y.)`,
+
+      4: `<b>Final:</b> Simplify gently: x = y² / (4a).<br>
+          Rearrange → y² = 4 a x.<br>
+          🎉 That’s the parabola equation!`
+    };
+    document.getElementById('parabSteps').innerHTML = text[step];
+  }
+
+  // --- ELLIPSE ---
+  function showEllipse(step) {
+    const text = {
+      1: `<b>Step 1:</b> From x = a cosθ, we get cosθ = x / a. Square both sides:<br>
+          cos²θ = x² / a².<br>
+          From y = b sinθ, we get sin²θ = y² / b².<br>
+          (It’s like translating secret code into fractions 🍕).`,
+
+      2: `<b>Step 2:</b> Add them: (x² / a²) + (y² / b²) = cos²θ + sin²θ.<br>
+          (Like adding apples + oranges 🍎🍊 but they match here).`,
+
+      3: `<b>Final:</b> cos²θ + sin²θ = 1 (basic identity).<br>
+          So (x² / a²) + (y² / b²) = 1.<br>
+          🎉 That’s the ellipse equation!`
+    };
+    document.getElementById('ellipseSteps').innerHTML = text[step];
+  }
+
+  // --- HYPERBOLA ---
+  function showHyperbola(step) {
+    const text = {
+      1: `<b>Step 1:</b> From x = a secθ → secθ = x / a.<br>
+          From y = b tanθ → tanθ = y / b.<br>
+          (Like giving each a nickname 🏷️).`,
+
+      2: `<b>Step 2:</b> Square and subtract: (x/a)² - (y/b)² = sec²θ - tan²θ.<br>
+          (Think: compare two siblings 👦👧 by subtraction).`,
+
+      3: `<b>Final:</b> We know sec²θ - tan²θ = 1.<br>
+          So (x² / a²) - (y² / b²) = 1.<br>
+          🎉 That’s the hyperbola equation!`
+    };
+    document.getElementById('hyperSteps').innerHTML = text[step];
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll("#cardsQ8 div");
+    cards.forEach((card, index) => {
+      // entrance animation
+      setTimeout(() => {
+        card.style.transition = "transform 0.5s ease, box-shadow 0.5s ease";
+        card.style.transform = "scale(1.05)";
+        card.style.boxShadow = "0 6px 12px rgba(0,0,0,0.2)";
+        setTimeout(() => {
+          card.style.transform = "scale(1)";
+          card.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+        }, 500);
+      }, index * 600);
+
+      // bounce on hover
+      card.addEventListener("mouseenter", () => {
+        card.style.animation = "bounce 0.6s";
+      });
+      card.addEventListener("animationend", () => {
+        card.style.animation = "";
+      });
+    });
+
+    // add bounce keyframes
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-12px); }
+        60% { transform: translateY(6px); }
+      }
+    `;
+    document.head.appendChild(style);
+  });
+function animateEven() {
+  let box = document.getElementById("functionBox");
+  box.innerText = "f(x) = x² (Even)";
+  box.style.transition = "transform 1s";
+  box.style.transform = "scaleX(-1)";
+  setTimeout(() => box.style.transform = "scaleX(1)", 1000);
+}
+
+function animateOdd() {
+  let box = document.getElementById("functionBox");
+  box.innerText = "f(x) = x³ (Odd)";
+  box.style.transition = "transform 1s";
+  box.style.transform = "rotate(180deg)";
+  setTimeout(() => box.style.transform = "rotate(0deg)", 1000);
+}
+
+function animateNeither() {
+  let box = document.getElementById("functionBox");
+  box.innerText = "f(x) = x² + x (Neither)";
+  box.style.transition = "transform 0.2s";
+  let count = 0;
+  let interval = setInterval(() => {
+    box.style.transform = `translateX(${count % 2 === 0 ? 10 : -10}px)`;
+    count++;
+    if (count > 5) {
+      clearInterval(interval);
+      box.style.transform = "translateX(0)";
+    }
+  }, 200);
+}
+
+// ✅ Reveal Answers with Steps
+function revealEven() {
+  document.getElementById("ans1").innerHTML = `
+    <b>Step 1:</b> f(x) = x² <br>
+    <b>Step 2:</b> f(-x) = (-x)² = x² <br>
+    <b>Step 3:</b> Since f(-x) = f(x), the function is <b style="color:green;">Even ✅</b>.
+  `;
+}
+
+function revealOdd() {
+  document.getElementById("ans2").innerHTML = `
+    <b>Step 1:</b> f(x) = x³ <br>
+    <b>Step 2:</b> f(-x) = (-x)³ = -x³ <br>
+    <b>Step 3:</b> f(-x) = -f(x), so the function is <b style="color:green;">Odd ✅</b>.
+  `;
+}
+
+function revealNeither() {
+  document.getElementById("ans3").innerHTML = `
+    <b>Step 1:</b> f(x) = x² + x <br>
+    <b>Step 2:</b> f(-x) = (-x)² + (-x) = x² - x <br>
+    <b>Step 3:</b> Compare: f(-x) = x² - x ≠ f(x) and ≠ -f(x) <br>
+    Therefore, the function is <b style="color:red;">Neither ❌</b>.
+  `;
+}
+</script>
+
+
+</body>
+</html>
