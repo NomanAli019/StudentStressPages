@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Sentellect{% endblock %}
+
+{% block content %}
+<section class="hero" style="padding: 140px 0 60px;">
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="animate">Welcome <span>Back</span></h1>
+      <p class="animate delay-1">Login to continue your learning journey</p>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="section">
+    <div style="max-width: 500px; margin: 0 auto;">
+      <div class="card animate delay-1">
+        <div style="padding: 40px;">
+          <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px;">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </h2>
+          
+          <form method="POST" action="{{ url_for('auth.login') }}">
+            <div style="margin-bottom: 20px;">
+              <label for="username" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text);">Username</label>
+              <input type="text" id="username" name="username" required autofocus
+                     style="width: 100%; padding: 12px 15px; border: 2px solid var(--gray); border-radius: 8px; font-size: 1rem; transition: all 0.3s ease;"
+                     onfocus="this.style.borderColor='var(--primary)'"
+                     onblur="this.style.borderColor='var(--gray)'">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+              <label for="password" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text);">Password</label>
+              <input type="password" id="password" name="password" required
+                     style="width: 100%; padding: 12px 15px; border: 2px solid var(--gray); border-radius: 8px; font-size: 1rem; transition: all 0.3s ease;"
+                     onfocus="this.style.borderColor='var(--primary)'"
+                     onblur="this.style.borderColor='var(--gray)'">
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+              <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" id="remember" name="remember" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
+                <span style="color: var(--text-light);">Remember me</span>
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+          </form>
+          
+          <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--gray);">
+            <p style="color: var(--text-light);">Don't have an account? <a href="{{ url_for('auth.signup') }}" style="color: var(--primary); font-weight: 600;">Sign Up</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

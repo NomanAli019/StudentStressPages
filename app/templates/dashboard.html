@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sentellect{% endblock %}
+
+{% block content %}
+<section class="hero" style="padding: 140px 0 60px;">
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="animate">Welcome back, <span>{{ current_user.username }}</span>!</h1>
+      <p class="animate delay-1">Ready to continue your mathematics learning journey?</p>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="section">
+    <div class="section-title">
+      <h2>Your Learning Dashboard</h2>
+      <p>Track your progress and continue learning</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px;">
+      <div class="card animate delay-1">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-book" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
+          <h3 style="font-size: 2rem; color: var(--primary); margin-bottom: 5px;">3</h3>
+          <p style="color: var(--text-light); font-weight: 600;">Chapters Available</p>
+          <p style="color: var(--text-lighter); font-size: 0.9rem; margin-top: 8px;">Functions, Differentiation, Integration</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-2">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-question-circle" style="font-size: 2.5rem; color: var(--success); margin-bottom: 15px;"></i>
+          <h3 style="font-size: 2rem; color: var(--success); margin-bottom: 5px;">24</h3>
+          <p style="color: var(--text-light); font-weight: 600;">Total Quizzes</p>
+          <p style="color: var(--text-lighter); font-size: 0.9rem; margin-top: 8px;">Multiple difficulty levels</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-3">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-chart-line" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px;"></i>
+          <h3 style="font-size: 2rem; color: var(--secondary); margin-bottom: 5px;">0%</h3>
+          <p style="color: var(--text-light); font-weight: 600;">Progress</p>
+          <p style="color: var(--text-lighter); font-size: 0.9rem; margin-top: 8px;">Start your first quiz!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="section-title">
+      <h2>Available Chapters</h2>
+      <p>Choose a chapter to start learning</p>
+    </div>
+    
+    <div style="display: grid; gap: 25px; margin-top: 40px;">
+      <div class="card animate delay-1" style="transition: all 0.3s ease; cursor: pointer;" 
+           onclick="window.location.href='{{ url_for('quizzes.chapters') }}'"
+           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--hover-shadow)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--card-shadow)'">
+        <div style="padding: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: var(--primary); font-size: 1.5rem;">
+              <i class="fas fa-book" style="margin-right: 10px;"></i>Chapter 4: Functions & Limits
+            </h3>
+            <span style="background: var(--primary-light); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">16 quizzes</span>
+          </div>
+          <p style="color: var(--text-light); margin-bottom: 0;">Master functions, limits, continuity, and differentiability</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-2" style="transition: all 0.3s ease; cursor: pointer;"
+           onclick="window.location.href='{{ url_for('quizzes.chapters') }}'"
+           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--hover-shadow)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--card-shadow)'">
+        <div style="padding: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: var(--success); font-size: 1.5rem;">
+              <i class="fas fa-book" style="margin-right: 10px;"></i>Chapter 5: Differentiation
+            </h3>
+            <span style="background: var(--success); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">3 quizzes</span>
+          </div>
+          <p style="color: var(--text-light); margin-bottom: 0;">Learn derivatives, chain rule, and applications</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-3" style="transition: all 0.3s ease; cursor: pointer;"
+           onclick="window.location.href='{{ url_for('quizzes.chapters') }}'"
+           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--hover-shadow)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--card-shadow)'">
+        <div style="padding: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: var(--secondary); font-size: 1.5rem;">
+              <i class="fas fa-book" style="margin-right: 10px;"></i>Chapter 6: Integration
+            </h3>
+            <span style="background: var(--secondary); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">5 quizzes</span>
+          </div>
+          <p style="color: var(--text-light); margin-bottom: 0;">Explore integration techniques and applications</p>
+        </div>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 50px;">
+      <a href="{{ url_for('quizzes.chapters') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">
+        <i class="fas fa-play"></i> Start Learning
+      </a>
+    </div>
+  </section>
+</div>
+{% endblock %}

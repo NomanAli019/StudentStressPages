@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Sentellect - Welcome{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  <div class="floating-shape shape-3"></div>
+  
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="animate">Welcome to <span>Sentellect</span></h1>
+      <p class="animate delay-1">Your personalized learning platform for 12th Class Mathematics (Pakistan Board)</p>
+      <div class="hero-buttons">
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary animate delay-2">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary animate delay-3">Login</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="section">
+    <div class="section-title">
+      <h2>Why Choose Sentellect?</h2>
+      <p>Personalized learning experience for mathematics excellence</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px;">
+      <div class="card animate delay-1">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-book" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+          <h3 style="color: var(--primary); margin-bottom: 15px;">Comprehensive Chapters</h3>
+          <p style="color: var(--text-light);">Access quizzes for Functions, Limits, Differentiation, and Integration</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-2">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--success); margin-bottom: 20px;"></i>
+          <h3 style="color: var(--primary); margin-bottom: 15px;">Track Progress</h3>
+          <p style="color: var(--text-light);">Monitor your learning journey and see your improvements</p>
+        </div>
+      </div>
+      
+      <div class="card animate delay-3">
+        <div style="text-align: center; padding: 30px;">
+          <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--secondary); margin-bottom: 20px;"></i>
+          <h3 style="color: var(--primary); margin-bottom: 15px;">Personalized Learning</h3>
+          <p style="color: var(--text-light);">Adaptive quizzes designed for different difficulty levels</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

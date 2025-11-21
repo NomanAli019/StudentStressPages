@@ -1,0 +1,172 @@
+You are an expert Python/Flask full-stack developer.
+Your job is to create a complete Flask web application using the following requirements. Follow the instructions carefully and generate the entire project structure, code, and files exactly as requested.
+
+🚀 PROJECT PURPOSE
+
+This project is part of a Final Year Project (FYP) called Sentellect, but this part does NOT include any AI integration.
+You only need to build a fully functional dynamic Flask application using the static templates provided.
+
+📂 SOURCE REPO (STATIC PAGES)
+
+Use the static HTML/CSS/JS pages from this public GitHub repo:
+
+https://github.com/NomanAli019/StudentStressPages
+
+
+These contain 12th class Mathematics (Pakistan Board) chapter quizzes and pages.
+
+📌 REQUIRED APPLICATION FEATURES
+
+Build a complete end-to-end Flask web application with the following requirements:
+
+✔ 1. Project Structure (Modular Approach)
+
+Create this exact folder structure:
+
+project/
+│ app.py
+│ config.py
+│ requirements.txt
+│
+├── instance/
+│     └── database.sqlite
+│
+├── app/
+│    ├── _init_.py
+│    ├── models.py
+│    ├── routes/
+│    │    ├── _init_.py
+│    │    ├── auth.py
+│    │    ├── quizzes.py
+│    │    └── main.py
+│    ├── static/
+│    │    ├── css/
+│    │    ├── js/
+│    │    └── images/
+│    └── templates/
+│         ├── base.html
+│         ├── login.html
+│         ├── signup.html
+│         ├── dashboard.html
+│         ├── chapters.html
+│         ├── quiz.html
+│         └── all other files from the repo
+
+✔ 2. Flask App Requirements
+
+Use SQLite as the database.
+
+Use SQLAlchemy ORM for all data models.
+
+App must run using:
+
+python app.py
+
+
+Use Blueprints for routes.
+
+Use Jinja2 templating.
+
+✔ 3. User Authentication
+
+Implement full login + signup + logout system:
+
+email
+
+username
+
+password (hashed with werkzeug.security)
+
+created_at timestamp
+
+Routes:
+
+/signup
+
+/login
+
+/logout
+
+/dashboard
+
+Restrict dashboard + quiz pages to logged-in users.
+
+Use Flask-Login for session management.
+
+✔ 4. Quiz / Chapters Data
+
+Create a CSV file inside /app/data/ containing:
+
+chapter_number, chapter_name, topic, quiz_file
+
+
+Example:
+
+1, Functions & Limits, Domain and Range, ch1-domain-range.html
+
+
+App should read this CSV and display:
+
+all chapters
+
+all topics
+
+each quiz page inside the templates folder
+
+✔ 5. Integration of Static Pages
+
+All HTML files from the GitHub repo should be placed in:
+
+app/templates/
+app/static/css/
+app/static/js/
+app/static/images/
+
+
+Link them properly.
+
+All quizzes must render dynamically using Flask routes:
+
+/chapters
+
+/chapter/<id>
+
+/quiz/<quiz_file>
+
+✔ 6. Dashboard Requirements
+
+Dashboard must show:
+
+Welcome message
+
+Chapters
+
+Progress placeholders (static for now)
+
+Button to start quizzes
+
+No AI features needed.
+
+✔ 7. Clean Coding Standards
+
+Modular architecture
+
+Comments on important functions
+
+Proper error handling
+
+Use Bootstrap or existing CSS from repo
+
+✔ 8. Deliverables
+
+Generate:
+
+✅ Complete folder structure
+✅ All Python files
+✅ All HTML templates (copied from repo)
+✅ database models
+✅ CSV topic data
+✅ Full routing system
+✅ Authentication system
+✅ Run instructions
+✅ requirements.txt

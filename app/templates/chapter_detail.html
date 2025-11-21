@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Chapter {{ chapter.number }} - Sentellect{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-book-open"></i> Chapter {{ chapter.number }}: {{ chapter.name }}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Select a topic to start practicing</p>
+                    <div class="list-group mt-4">
+                        {% for topic in chapter.topics %}
+                        <a href="{{ url_for('quizzes.quiz', quiz_file=topic.quiz_file) }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-question-circle text-primary"></i> {{ topic.topic }}
+                                </h5>
+                                <span class="badge bg-primary">Start Quiz</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

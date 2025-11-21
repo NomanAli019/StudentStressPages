@@ -1,0 +1,25 @@
+chapter_number,chapter_name,topic,quiz_file
+4,Functions & Limits,Functions (High Stress),4.1 (high stress).html
+4,Functions & Limits,Functions (Low Stress),4.1 low stress.html.html
+4,Functions & Limits,Functions (Moderate),4.1 moderate.html
+4,Functions & Limits,Functions (Medium),4.1m.html
+4,Functions & Limits,Limits (High Stress),4.2 high.html
+4,Functions & Limits,Limits (Low Stress),4.2 low.html
+4,Functions & Limits,Limits (Moderate),4.2m.html
+4,Functions & Limits,Continuity (High Stress),4.3 highhhhh.html
+4,Functions & Limits,Continuity (Low Stress),4.3 lowww.html
+4,Functions & Limits,Continuity (Moderate),4.3m.html
+4,Functions & Limits,Differentiability (High Stress),4.4 highhh.html
+4,Functions & Limits,Differentiability (Low Stress),4.4 low.html
+4,Functions & Limits,Differentiability (Moderate),4.4mm.html
+4,Functions & Limits,Advanced Topics (High Stress),4.5 high.html
+4,Functions & Limits,Advanced Topics (Low Stress),4.5 low.html
+4,Functions & Limits,Advanced Topics (Moderate),4.5m.html
+5,Differentiation,Derivatives (Moderate),5.1 moderate.html
+5,Differentiation,Chain Rule (Moderate),5.2 moderate.html
+5,Differentiation,Applications (Moderate),5.3 moderate.html
+6,Integration,Basic Integration (Moderate),6.1 moderate.html
+6,Integration,Integration Techniques (Moderate),6.2 moderate.html
+6,Integration,Definite Integrals (Moderate),6.3 moderate.html
+6,Integration,Applications of Integration (Moderate),6.4 moderate.html
+6,Integration,Advanced Integration (Moderate),6.5 moderate.html

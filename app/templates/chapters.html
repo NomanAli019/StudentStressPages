@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Chapters - Sentellect{% endblock %}
+
+{% block content %}
+<section class="hero" style="padding: 140px 0 60px;">
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="animate">Mathematics <span>Chapters</span></h1>
+      <p class="animate delay-1">Choose a chapter and start your quiz</p>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  {% for chapter in chapters %}
+  <section class="section">
+    <div class="section-title">
+      <h2>Chapter {{ chapter.number }}: {{ chapter.name }}</h2>
+      <p>{{ chapter.topics|length }} quizzes available</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 40px;">
+      {% for topic in chapter.topics %}
+      <div class="card animate delay-{{ loop.index }}" style="transition: all 0.3s ease; cursor: pointer; border-left: 4px solid var(--primary);"
+           onclick="window.location.href='{{ url_for('quizzes.quiz', quiz_file=topic.quiz_file) }}'"
+           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--hover-shadow)'; this.style.borderLeftColor='var(--secondary)'"
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--card-shadow)'; this.style.borderLeftColor='var(--primary)'">
+        <div style="padding: 25px;">
+          <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem;">
+            <i class="fas fa-question-circle" style="margin-right: 8px;"></i>{{ topic.topic }}
+          </h4>
+          <a href="{{ url_for('quizzes.quiz', quiz_file=topic.quiz_file) }}" class="btn btn-primary" style="font-size: 0.95rem; padding: 10px 20px;">
+            <i class="fas fa-play"></i> Start Quiz
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}
